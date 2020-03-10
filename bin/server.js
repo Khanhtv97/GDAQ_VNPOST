@@ -18,12 +18,12 @@ var dataGDAQ = {barcode: "", massweight:"", calweight: "", priceweight: "", diff
 let massWeight ='';
 let CalWeight = '';
 let priceWeight ='';
-let massWeightVNP ='';
-let CalWeightVNP = '';
-let priceWeightVNP ='';
-let lengthVNP = 'NaN';
-let heightVNP = 'NaN';
-let widthVNP = 'NaN';
+let massWeightVNP ='-';
+let CalWeightVNP = '-';
+let priceWeightVNP ='-';
+let lengthVNP = '-';
+let heightVNP = '-';
+let widthVNP = '-';
 let isAirmail = ''; 
 let diffWeight = '';
 let rate = '';
@@ -90,13 +90,13 @@ barcodeController.portBarcode.on('data', (dataBarcode)=>{
   dataGDAQ.barcode = dataBarcode.toString();
   io.sockets.emit('barcode', {barcode: dataBarcode.toString()});
   serviceVNP.vnpService(token, dataBarcode.toString()).then((svrRes)=>{
+    
     dataVNP = JSON.parse(svrRes);
-    massWeightVNP = dataVNP.Weight;
-    CalWeightVNP = dataVNP.WeightConvert;
-    if(dataVNP.Width != null){
-    widthVNP = dataVNP.Width;}
-    heightVNP = dataVNP.Height;
-    lengthVNP = dataVNP.Length;
+    if(dataVNP.Weight != null){massWeightVNP = dataVNP.Weight;}
+    if(dataVNP.WeightConvert != null){CalWeightVNP = dataVNP.WeightConvert;}
+    if(dataVNP.Width != null){widthVNP = dataVNP.Width;}
+    if(dataVNP.Height !=null){heightVNP = dataVNP.Height;}
+    if(dataVNP.Length !=null){lengthVNP = dataVNP.Length;}
     isAirmail = dataVNP.IsAirmail;
     if(massWeightVNP>CalWeightVNP){priceWeightVNP = massWeightVNP;}
     else{priceWeightVNP=CalWeightVNP;}
