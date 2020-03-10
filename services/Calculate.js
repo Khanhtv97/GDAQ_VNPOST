@@ -7,4 +7,10 @@ function CalP(barcode, IsAirmail, length, width, height){
         return ((length*width*height)/6000).toFixed(0);
     }
   }
+function diffWeight(priceW, priceWVNP){
+    return priceW-priceWVNP;
+}
+function rate(diffW, priceW){
+    return ((diffW*100)/priceW).toFixed(2);
+}
 module.exports.Cal = CalP;

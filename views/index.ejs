@@ -15,9 +15,10 @@
     </head>
     <body>
     <div style='width:1024px;height:820px;border:1px solid gray;position:relative;'>
-    <div id=divHdr     style='background:steelblue;'> 
-    <button onclick="shexec('pkill chromium;sleep 1;poweroff');">PowerOFF</button>
-    <button onclick="shexec('pkill chromium;sleep 1;reboot');">reboot</button>
+    <div id=divHdr     style='background:cornflowerblue;'> 
+    <button onclick="shexec('pkill chromium;sleep 1;poweroff');">Tắt nguồn</button>
+    <button onclick="shexec('pkill chromium;sleep 1;reboot');">Khởi động lại</button>
+    <button onclick="shexec('pkill chromium;sleep 1;reboot');">Cài đặt</button>
     <b>GDAQ2020</b>
         <span id=spNow style='background:orange;color:black;position:absolute;right:8px;padding:0px 4px 0px 4px;'>2019-09-09 12:34:56</span></big></div>    
         <div style='background:green;'>
@@ -33,14 +34,14 @@
             <td style='width:20%;'>Chênh lệch (g)</td>
             <td>Tỷ lệ chênh lệch (%)</td>
         </tr>
-        <tr style='background:steelblue;font-size:40px;'>        
+        <tr style='background:cornflowerblue;font-size:40px;'>        
             <td id=massWeight>-</td> 
             <td id=calWeight>-</td> 
             <td id=priceWeight>-</td> 
-            <td rowspan=2 style='background:gray;color:white;font-size:56px;' id=diffWeigh>-<!--button onclick='aplay();' style='background:darkred;color:white;font-size:30px;'>((♫))</button--></td>
-            <td rowspan=2 style='background:gray;color:white;font-size:56px;' id=rate>-</td>
+            <td rowspan=2 style='background:royalblue;color:white;font-size:56px;' id=diffWeigh>-<!--button onclick='aplay();' style='background:darkred;color:white;font-size:30px;'>((♫))</button--></td>
+            <td rowspan=2 style='background:royalblue;color:white;font-size:56px;' id=rate>-</td>
         </tr>
-        <tr style='background:khaki;color:black;font-size:40px;'>
+        <tr style='background:yellow;color:black;font-size:40px;'>
             <td id=vnpostWeigh>-</td>    
             <td id=vnpostCal>-</td>         
             <td id=vnpostPrice>-</td>    
@@ -51,19 +52,24 @@
         <iframe id=ifr1 src='/imagesItem/20200305133522.jpg' frameborder=1 style='height:400px;width:610px;margin:0 0 0 0;padding:0 0 0 0;'></iframe>
         <div><!--input type=text id=ipc size=9 value='192.168.1.49'-->
     <br/>
-    <span style='background:khaki;color:black;font-size:30px;padding:9px 9px 9px 9px;' id=spAirScK>- - -</span>
-    <br/><br/><br/><br/>
-    <span style='color:black;'>Bưu Tá (Person)</span>
-    <br/>
-    <button id=btPerson onclick=person_set()>Nguyễn Văn A</button>
-    <br/>
+    <span style='color:black;'>Bưu Tá (Person): </span>
+    <span id="users" style='color:black;'>Tong Van Khanh</span>
+    <br/><br/>
+    <fieldset style="width: 370px; background-color:floralwhite;">
+        <legend style="color: black;">Trạng thái:</legend>
+        <span style='color:black;font-size:30px;padding:9px 9px 9px 9px;' id=spAirScK>- - -</span>
+    </fieldset>
+    <br/><br/>
+    
     <!-- <span style='color:black;'>Hiệu chỉnh đo kích thước</span> -->
-    <br/>
     <!-- <button id=btLWH0 onclick=lwh0_cal()>Lmm0=725;Wmm0=720;Hmm0=1010</button><br/> -->
-    <span id = msgSSL style="background:red; color:white; font-size:20px;"></span><br/>
-    <span id = msgSSH style="background:red; color:white; font-size:20px;"></span><br/>
-    <span id = msgSSW style="background:red; color:white; font-size:20px;"></span><br/>
-    <span id = msgScale style="background:red; color:white; font-size:20px;"></span>
+    <fieldset style="width: 370px;">
+        <legend style="color: black;">Message:</legend>
+        <span id = msgSSL style="background:red; color:white; font-size:20px;"></span><br/>
+        <span id = msgSSH style="background:red; color:white; font-size:20px;"></span><br/>
+        <span id = msgSSW style="background:red; color:white; font-size:20px;"></span><br/>
+        <span id = msgScale style="background:red; color:white; font-size:20px;"></span>
+    </fieldset>
     </div></div>
     <div id=divDims style='width:100%;text-align:center;'><big></big><!--height:80px;-->
         <table style='width:100%;'>
@@ -78,22 +84,22 @@
             </tr>
             <tr style="font-size:18px;">
                 <td style="text-align: left;">Giá trị đo hiện tại<br></td>
-                <td style="background-color:steelblue; width: 25%;"></td>
+                <td style="background-color:cornflowerblue; width: 25%;"></td>
             </tr>
         </table>  <br>
         <table style="width: 100%;">  
             <tr style="font-size:18px;">  
                 <td style="text-align: left;">Giá trị đo tại bưu cục chấp nhận</td>
-                <td style="background-color:khaki; width: 25%;"></td>
+                <td style="background-color:yellow; width: 25%;"></td>
             </tr>
         </table>        
             </td></tr>
-        <tr style='background:steelblue;font-size:40px;'>        
+        <tr style='background:cornflowerblue;font-size:40px;'>        
             <td id=length>-</td> 
             <td id=width>-</td> 
             <td id=height>-</td> 
         </tr>
-        <tr style='background:khaki;color:black;font-size:40px;'>
+        <tr style='background:yellow;color:black;font-size:40px;'>
             <td id=vnpostLength>-</td> 
             <td id=vnpostWidth>-</td>
              <td id=vnpostHeight>-</td>-</td>            

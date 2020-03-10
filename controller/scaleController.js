@@ -26,10 +26,10 @@ function parserDataScale(rawData){
     dataObj.weigh = Weight;
     dataObj.unit =Unit;
     if(Header1 == 'US'){
-        dataObj.message = "Can khong on dinh";
+        dataObj.message = "Cân không ổn định, Chờ ổn định và quét lại !";
     }
     else if (Header1 =="OL"){
-       dataObj.message = "Can qua tai";
+       dataObj.message = "Cân quá tải !";
     }
     return dataObj;
 }

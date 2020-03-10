@@ -92,11 +92,16 @@ barcodeController.portBarcode.on('data', (dataBarcode)=>{
   serviceVNP.vnpService(token, dataBarcode.toString()).then((svrRes)=>{
     
     dataVNP = JSON.parse(svrRes);
-    if(dataVNP.Weight != null){massWeightVNP = dataVNP.Weight;}
-    if(dataVNP.WeightConvert != null){CalWeightVNP = dataVNP.WeightConvert;}
-    if(dataVNP.Width != null){widthVNP = dataVNP.Width;}
-    if(dataVNP.Height !=null){heightVNP = dataVNP.Height;}
-    if(dataVNP.Length !=null){lengthVNP = dataVNP.Length;}
+    if(dataVNP.Weight != null){massWeightVNP = dataVNP.Weight; dataGDAQ.massweightVNP=dataVNP.Weight;}
+    else{massWeightVNP = '-'; dataGDAQ.massweightVNP ='';}
+    if(dataVNP.WeightConvert != null){CalWeightVNP = dataVNP.WeightConvert; dataGDAQ.CalWeightVNP = dataVNP.WeightConvert;}
+    else{CalWeightVNP = '-'; dataGDAQ.CalWeightVNP = '';}
+    if(dataVNP.Width != null){widthVNP = dataVNP.Width; dataGDAQ.widthVNP = dataVNP.Width;}
+    else{widthVNP = '-'; dataGDAQ.widthVNP = '';}
+    if(dataVNP.Height !=null){heightVNP = dataVNP.Height; dataGDAQ.heightVNP = dataVNP.Height; }
+    else{heightVNP = '-'; dataGDAQ.heightVNP = '';}
+    if(dataVNP.Length !=null){lengthVNP = dataVNP.Length; dataGDAQ.lengthVNP = dataVNP.Length;}
+    else{lengthVNP ='-'; dataGDAQ.lengthVNP = '';}
     isAirmail = dataVNP.IsAirmail;
     if(massWeightVNP>CalWeightVNP){priceWeightVNP = massWeightVNP;}
     else{priceWeightVNP=CalWeightVNP;}
@@ -113,9 +118,9 @@ barcodeController.portBarcode.on('data', (dataBarcode)=>{
       dataGDAQ.rawU81 = JSON.stringify(dataU81);
         //console.log(lengthCalib-widthCalib);
         //push data to object
-        var lengthPercel ='NaN';
-        var heightPercel = 'NaN';
-        var widthPercel = 'NaN';
+        var lengthPercel ='-';
+        var heightPercel = '-';
+        var widthPercel = '-';
         if(dataU81.L.Lmm != ''){lengthPercel = lengthCalib - dataU81.L.Lmm;}
         if(dataU81.W.Wmm != ''){widthPercel= widthCalib - dataU81.W.Wmm;}
         if(dataU81.H.Hmm != ''){heightPercel = heightCalib - dataU81.H.Hmm;}
@@ -132,14 +137,18 @@ barcodeController.portBarcode.on('data', (dataBarcode)=>{
         /////////////emit data////////////////////////////////////////////////////////////////
         io.sockets.emit('u81', {length:lengthPercel, width: widthPercel, height:  heightPercel, calculateWeight : CalWeight, pWeight: priceWeight, msgL: dataU81.L.message, msgH: dataU81.H.message, msgW: dataU81.W.message});
       
-      u81Controller.onLaserU81(portSS,u81Controller.constU81.onLaserSS1,u81Controller.constU81.onLaserSS2, u81Controller.constU81.onLaserSS3);   
-      io.emit('dataVNP', {weight: massWeightVNP, calweight: CalWeightVNP, priceweight: priceWeightVNP, length: lengthVNP, width: widthVNP, height: heightVNP});
+      u81Controller.onLaserU81(portSS,u81Controller.constU81.onLaserSS1,u81Controller.constU81.onLaserSS2, u81Controller.constU81.onLaserSS3);
+      // 
+      diffWeight = priceWeight - priceWeightVNP;
+      dataGDAQ.diffweight = diffWeight;
+      dataGDAQ.priceweightVNP = priceWeightVNP;
+      rate = ((diffWeight*100)/priceWeight).toFixed(2);;
+      io.emit('dataVNP', {weight: massWeightVNP, calweight: CalWeightVNP, priceweight: priceWeightVNP, length: lengthVNP, width: widthVNP, height: heightVNP, diffW: diffWeight, Rate: rate, isAir: isAirmail});
       takePictureCam.then((PicturePath, err)=>{
         if (err) throw err;
-        
         dataGDAQ.pathPicture = "http://localhost:3000"+(PicturePath.split("../public"))[1].toString();
         var picturepath = PicturePath;
-        console.log(PicturePath);
+        console.log(picturepath);
         io.sockets.emit('picture', {picturePath:  PicturePath});//.split("../public")
         //console.log(dataGDAQ);
         knex('tbdata').insert(dataGDAQ).then((result)=>{
@@ -178,7 +187,7 @@ function onError(error) {
     ? 'Pipe ' + port
     : 'Port ' + port;
 
-  // handle specific listen errors with friendly messages
+
   switch (error.code) {
     case 'EACCES':
       console.error(bind + ' requires elevated privileges');
