@@ -1,0 +1,40 @@
+<html><body>
+    <table border="1" cellpadding="7" cellspacing="7">
+      <tr>
+        <th width="50px">No</th>
+        <th>Thoi gian</th>
+        <th>Ma buu kien</th>
+        <th>Khoi luong</th>
+        <th>Quy doi</th>
+        <th>Tinh cuoc</th>
+        <th>Dai</th>
+        <th>Rong</th>
+        <th>Cao</th>
+        <th>Anh buu pham</th>
+        <th>More info U81</th>
+        <th>More info Scale</th>
+      </tr>
+      <% if(dataGDAQ.length){ 
+        for(var i = 0;i < dataGDAQ.length;i++) { %>
+      <tr>
+        <td><%=(i+1)%></td>
+        <td><%=dataGDAQ[i].created_at%></td>
+        <td><%=dataGDAQ[i].barcode%></td>
+        <td><%=dataGDAQ[i].massweight%></td>
+        <td><%=dataGDAQ[i].calweight%></td>
+        <td><%=dataGDAQ[i].priceweight%></td>
+        <td><%=dataGDAQ[i].length%></td>
+        <td><%=dataGDAQ[i].width%></td>
+        <td><%=dataGDAQ[i].height%></td>
+        <td><%=dataGDAQ[i].pathPicture%></td>
+        <td><%=dataGDAQ[i].rawU81%></td>
+        <td><%=dataGDAQ[i].rawScale%></td>
+      </tr>
+      <% }
+      }else{ %>
+      <tr>
+        <td colspan="3">No data</td>
+      </tr>
+    <% } %>
+    </table>
+    </body></html>
