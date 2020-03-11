@@ -12,15 +12,18 @@
         margin:2px 2px 2px 2px;padding:2px 0px 2px 0px;
         }    
     </style>
+    <script type="text/javascript" src="js/datetime.js"></script>
     </head>
     <body>
-    <div style='width:1024px;height:820px;border:1px solid gray;position:relative;'>
+    <div style='width:1024px;height:800px;border:1px solid gray;position:relative;'>
     <div id=divHdr     style='background:cornflowerblue;'> 
     <button onclick="shexec('pkill chromium;sleep 1;poweroff');">Tắt nguồn</button>
     <button onclick="shexec('pkill chromium;sleep 1;reboot');">Khởi động lại</button>
-    <button onclick="shexec('pkill chromium;sleep 1;reboot');">Cài đặt</button>
+    <a href="/config"><button>Config</button></a>
     <b>GDAQ2020</b>
-        <span id=spNow style='background:orange;color:black;position:absolute;right:8px;padding:0px 4px 0px 4px;'>2019-09-09 12:34:56</span></big></div>    
+        
+        <span id=date_time style='background:orange;color:black;position:absolute;right:8px;padding:0px 4px 0px 4px;'>2019-09-09 12:34:56</span></big></div>    
+        <script type="text/javascript">window.onload = date_time('date_time');</script>
         <div style='background:green;'>
             <img src="/images/logoGBS.jpg" width="50" height="60" style='background-color:white;'>
       Mã Bưu Kiện: <span id=Barcode style='font-size:40px;color:white;'>-</span> 
@@ -49,14 +52,14 @@
     </table> 
     </div>  
     <div style='width:100%;margin:0 0 0 0;padding:0 0 0 0;display:flex;'>
-        <iframe id=ifr1 src='/imagesItem/20200305133522.jpg' frameborder=1 style='height:400px;width:610px;margin:0 0 0 0;padding:0 0 0 0;'></iframe>
+        <iframe id=ifr1 src='/images/vnpost.png' frameborder=1 style='height:350px;width:610px;margin:0 0 0 0;padding:0 0 0 0;'></iframe>
         <div><!--input type=text id=ipc size=9 value='192.168.1.49'-->
     <br/>
     <span style='color:black;'>Bưu Tá (Person): </span>
     <span id="users" style='color:black;'>Tong Van Khanh</span>
     <br/><br/>
-    <fieldset style="width: 370px; background-color:floralwhite;">
-        <legend style="color: black;">Trạng thái:</legend>
+    <fieldset style="width: 370px;">
+        <legend style="color: black;" >Trạng thái:</legend>
         <span style='color:black;font-size:30px;padding:9px 9px 9px 9px;' id=spAirScK>- - -</span>
     </fieldset>
     <br/><br/>
@@ -70,6 +73,9 @@
         <span id = msgSSW style="background:red; color:white; font-size:20px;"></span><br/>
         <span id = msgScale style="background:red; color:white; font-size:20px;"></span>
     </fieldset>
+    <br/>
+    <a href="/config"><button>Hiệu chỉnh đo kích thước</button></a>
+    <span id='Calib' style="color: black; font-size: small;">
     </div></div>
     <div id=divDims style='width:100%;text-align:center;'><big></big><!--height:80px;-->
         <table style='width:100%;'>
@@ -111,3 +117,5 @@
     </html>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
     <script src="js/main.js"></script>
+
+    <!-- Modal config -->

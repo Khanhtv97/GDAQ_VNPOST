@@ -21,12 +21,9 @@ knex.schema
         t.string('widthVNP', 100).nullable;
         t.string('heightVNP', 100).nullable;
         t.string('pathPicture', 100).nullable;
-        t.json('rawU81').nullable;
-        t.json('rawScale').nullable;
-        //t.string('created_at').nullable; //
+        // t.json('rawU81').nullable;
+        // t.json('rawScale').nullable;
         t.timestamps(false, true);
-        //t.dateTime('created_at', {useTz: true, precision: 7}).defaultTo(knex.fn.now());
-        //t.dateTime('created_at', { precision: 7, useTz: false}).defaultTo(knex.fn.now());
       });
     }
   })

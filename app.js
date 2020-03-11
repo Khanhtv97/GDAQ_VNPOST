@@ -40,5 +40,9 @@ app.use(function(req, res, next){
     res.render('login')
 });
 //datalog page
+app.use('/config', appRoutes);
+app.use(function(req, res, next){
+    res.render('config')
+});
 
 module.exports = app;

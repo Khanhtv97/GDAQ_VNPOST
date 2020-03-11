@@ -1,11 +1,14 @@
-var socket = io.connect('http://localhost:3000'); //connect to server
+var socket = io.connect('http://192.168.0.231:3000'); //connect to server
+        socket.on('calibVal', function(data){
+            document.getElementById('Calib').innerHTML = data.Val;
+        });
         socket.on('barcode', function(data){
             document.getElementById('Barcode').innerHTML = data.barcode;
         });
         socket.on('weight', function(data){
             document.getElementById('massWeight').innerHTML = data.massweight;
             
-            if(data.h1 == 'US'||data.h1 =='OT'){
+            if(data.h1 != 'ST'){
                 document.getElementById('massWeight').style.backgroundColor ="red";
                 document.getElementById('msgScale').innerHTML = data.msg;
             }else{
@@ -62,4 +65,5 @@ var socket = io.connect('http://localhost:3000'); //connect to server
             document.getElementById('spAirScK').innerHTML = "Đường Bay"
             }else{document.getElementById('spAirScK').innerHTML = "Đường Bộ"}
         });
+        
         //vnpostWeigh

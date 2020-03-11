@@ -14,7 +14,7 @@ const knex = require('knex')(require('../model/connection'));
 const SerialPort = require('serialport'); 
 const Readline = SerialPort.parsers.Readline;
 
-var dataGDAQ = {barcode: "", massweight:"", calweight: "", priceweight: "", diffweight: "", rate: "", length: "",width: "", height: "", massweightVNP: "", calweightVNP: "", priceweightVNP: "", lengthVNP: "", widthVNP: "", heightVNP: "", pathPicture: "",rawU81: "", rawScale: ""}
+var dataGDAQ = {barcode: "", massweight:"", calweight: "", priceweight: "", diffweight: "", rate: "", length: "",width: "", height: "", massweightVNP: "", calweightVNP: "", priceweightVNP: "", lengthVNP: "", widthVNP: "", heightVNP: "", pathPicture: ""}
 let massWeight ='';
 let CalWeight = '';
 let priceWeight ='';
@@ -47,6 +47,15 @@ var io = require('socket.io').listen(server);
 io.on('connection',(socket)=>{
 
     console.log('new connection made.');
+    knex.select().table('tbcalibSS').then((data)=>
+    {
+      data.map(function(row){
+      lengthCalib = row.calibLength;
+      widthCalib = row.calibWidth;
+      heightCalib = row.calibHeight;
+      io.sockets.emit('calibVal', {Val:"(D:"+lengthCalib+"mm "+"R: "+widthCalib+"mm "+"C: "+heightCalib+"mm)"});
+    });
+    });
 });
 
 server.listen(port);
@@ -70,14 +79,7 @@ server.on('listening', onListening);
 
 
 ///////////////get data Calib sensors from DB/////////////////////////
-knex.select().table('tbcalibSS').then((data)=>
-  {
-    data.map(function(row){
-    lengthCalib = row.calibLength;
-    widthCalib = row.calibWidth;
-    heightCalib = row.calibHeight;
-});
-  });
+
 /////////////////////////////////////////////////////////////
 
 
@@ -110,12 +112,22 @@ barcodeController.portBarcode.on('data', (dataBarcode)=>{
       console.log(dataScale);
       massWeight = dataScale.weigh*1000;
       dataGDAQ.massweight = massWeight;
-      dataGDAQ.rawScale = JSON.stringify(dataScale);
+      //dataGDAQ.rawScale = JSON.stringify(dataScale);
       io.sockets.emit('weight', {massweight: massWeight, h1: dataScale.header1, msg: dataScale.message});
   });
+    // * Get value Calib*//
+    knex.select().table('tbcalibSS').then((data)=>
+    {
+      data.map(function(row){
+      lengthCalib = row.calibLength;
+      widthCalib = row.calibWidth;
+      heightCalib = row.calibHeight;
+    });
+    });
+    //////////////////////
   u81Controller.OneShotReadU81(portSS, u81Controller.constU81.oneshot1,u81Controller.constU81.oneshot2, u81Controller.constU81.oneshot3).then((dataU81)=>{
       console.log(dataU81);
-      dataGDAQ.rawU81 = JSON.stringify(dataU81);
+     // dataGDAQ.rawU81 = JSON.stringify(dataU81);
         //console.log(lengthCalib-widthCalib);
         //push data to object
         var lengthPercel ='-';
@@ -143,6 +155,7 @@ barcodeController.portBarcode.on('data', (dataBarcode)=>{
       dataGDAQ.diffweight = diffWeight;
       dataGDAQ.priceweightVNP = priceWeightVNP;
       rate = ((diffWeight*100)/priceWeight).toFixed(2);;
+      dataGDAQ.rate = rate;
       io.emit('dataVNP', {weight: massWeightVNP, calweight: CalWeightVNP, priceweight: priceWeightVNP, length: lengthVNP, width: widthVNP, height: heightVNP, diffW: diffWeight, Rate: rate, isAir: isAirmail});
       takePictureCam.then((PicturePath, err)=>{
         if (err) throw err;
@@ -156,6 +169,7 @@ barcodeController.portBarcode.on('data', (dataBarcode)=>{
         });
     });
   })
+ 
 });
 ////////////////////////////////////
 function normalizePort(val) {
@@ -213,3 +227,4 @@ function onListening() {
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
 }
+module.exports.io = io;

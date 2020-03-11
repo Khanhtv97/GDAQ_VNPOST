@@ -14,13 +14,13 @@ knex.schema
     .catch(function(e) {
       console.error(e);
     });
-    knex('tbcalibSS').insert({calibLength: '520', calibWidth: '409',calibHeight: '541'}).then((result)=>{
-      console.log("success insert to DB ! ");
-  });
-  // knex.select().table('tbcalibSS').then((data)=>
-  //   {
-  //     data.map(function(row){
-  //       console.log(row)
-  //     })
-  //   }
-  //   )
+  //   knex('tbcalibSS').update({calibLength: '520', calibWidth: '410',calibHeight: '541'}).then((result)=>{
+  //     console.log("success insert to DB ! ");
+  // });
+  knex.select().table('tbcalibSS').then((data)=>
+    {
+      data.map(function(row){
+        console.log(row)
+      })
+    }
+    )

@@ -1,8 +1,70 @@
-<html><body>
-    <table border="1" cellpadding="7" cellspacing="7">
+<html>
+  <style>
+  th {
+    padding-top: 2px;
+    padding-bottom: 2px;
+    text-align: center;
+    background-color: #4CAF50;
+    color: white;
+  }
+  td,th {
+    border: 1px solid #ddd;
+    padding: 4px;
+    text-align: center;
+  }
+  tr:nth-child(even){background-color: #f2f2f2;}
+  tr:hover {background-color: #ddd;}
+  </style>
+  <body>
+    <h1>Bang thong ke du lieu so sanh</h1>
+   
+    <!-- date time picker -->
+    <form action="/datalog">
+      <label for="from">From:</label>
+      <input type="date" id="from" name="fromdate">
+      <input type="time" id="from" name="fromtime">
+      <label for="to">To:</label>
+      <input type="date" id="to" name="todate">
+      <input type="time" id="from" name="totime">
+      <input type="submit" value="Submit">
+    </form>
+    <a href="/export2excel"><button>Export Excel</button></a>
+    <!-- ... -->
+    <table>
+      <col width="1%">
+        <col width="100px">
+        <col width="1%">
+        <col width="1%">
+        <col width="1%">
+        <col width="1%">
+        <col width="1%">
+        <col width="1%">
+        <col width="1%">
+        <col width="1%">
+        <col width="1%">
+        <col width="100%">
+        <col width="1%">
+        <col width="1%">
+        <col width="1%">
+        <col width="1%">
+        <col width="1%">
+        <col width="1%">
+        <col width="1%">
+        <col width="1%">
+        <col width="1%">
+        <col width="100%">
+        <col width="1%">
+        <col width="1%">
+        <col width="1%">
+        <col width="1%">
+        <col width="1%">
+        <col width="1%">
+        <col width="1%">
+        <col width="1%">
       <tr>
-        <th width="50px">No</th>
+        <th width="50px">STT</th>
         <th>Thoi gian</th>
+        <th>Buu Ta</th>
         <th>Ma buu kien</th>
         <th>Khoi luong</th>
         <th>Quy doi</th>
@@ -10,15 +72,22 @@
         <th>Dai</th>
         <th>Rong</th>
         <th>Cao</th>
+        <th>Chenh Lech</th>
+        <th>Ty le</th>
+        <th>Khoi luong(VNP)</th>
+        <th>Quy doi(VNP)</th>
+        <th>Tinh cuoc(VNP)</th>
+        <th>Dai(VNP)</th>
+        <th>Rong(VNP)</th>
+        <th>Cao(VNP)</th>
         <th>Anh buu pham</th>
-        <th>More info U81</th>
-        <th>More info Scale</th>
       </tr>
       <% if(dataGDAQ.length){ 
         for(var i = 0;i < dataGDAQ.length;i++) { %>
       <tr>
         <td><%=(i+1)%></td>
         <td><%=dataGDAQ[i].created_at%></td>
+        <td>Khanh Tong</td>
         <td><%=dataGDAQ[i].barcode%></td>
         <td><%=dataGDAQ[i].massweight%></td>
         <td><%=dataGDAQ[i].calweight%></td>
@@ -26,9 +95,15 @@
         <td><%=dataGDAQ[i].length%></td>
         <td><%=dataGDAQ[i].width%></td>
         <td><%=dataGDAQ[i].height%></td>
-        <td><%=dataGDAQ[i].pathPicture%></td>
-        <td><%=dataGDAQ[i].rawU81%></td>
-        <td><%=dataGDAQ[i].rawScale%></td>
+        <td><%=dataGDAQ[i].diffweight%></td>
+        <td><%=dataGDAQ[i].rate%></td>
+        <td><%=dataGDAQ[i].massweightVNP%></td>
+        <td><%=dataGDAQ[i].calweightVNP%></td>
+        <td><%=dataGDAQ[i].priceweightVNP%></td>
+        <td><%=dataGDAQ[i].lengthVNP%></td>
+        <td><%=dataGDAQ[i].widthVNP%></td>
+        <td><%=dataGDAQ[i].heightVNP%></td>
+        <td><link> <%=dataGDAQ[i].pathPicture%></link></td>
       </tr>
       <% }
       }else{ %>

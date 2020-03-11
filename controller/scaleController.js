@@ -30,6 +30,8 @@ function parserDataScale(rawData){
     }
     else if (Header1 =="OL"){
        dataObj.message = "Cân quá tải !";
+    }else if(Header1 !='ST'&&Header1!='OL'&&Header1!='US'){
+        dataObj.message ="Can chua san sang, cho 2s va quet lai !";
     }
     return dataObj;
 }
