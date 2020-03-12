@@ -5,6 +5,7 @@ knex.schema
     if (!exists) {
       return knex.schema.createTable('tbdata', function(t) {
         t.increments('id').primary();
+        t.string('user').nullable;
         t.string('barcode').nullable;
         t.string('massweight').nullable; // var dataGDAQ = {barocde: "", massweigh:"", calweigh, priceweigh, diffweigh, rate, length,width, height, massweighVNP, calweighVNP, priceweighVNP, lengthVNP, widthVNP, heightVNP}
         t.string('calweight').nullable;
@@ -23,7 +24,8 @@ knex.schema
         t.string('pathPicture', 100).nullable;
         // t.json('rawU81').nullable;
         // t.json('rawScale').nullable;
-        t.timestamps(false, true);
+        //t.timestamps(false, true);
+        t.dateTime('created_at');
       });
     }
   })

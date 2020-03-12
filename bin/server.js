@@ -1,6 +1,7 @@
 var app = require('../app');
 var debug = require('debug')('angular2-nodejs:server');
 var http = require('http');
+const host = 'http://192.168.0.231:3000'
 /* Processing */
 var u81Controller = require('../controller/u81Controller');
 var scaleController = require('../controller/scaleController');
@@ -14,7 +15,8 @@ const knex = require('knex')(require('../model/connection'));
 const SerialPort = require('serialport'); 
 const Readline = SerialPort.parsers.Readline;
 
-var dataGDAQ = {barcode: "", massweight:"", calweight: "", priceweight: "", diffweight: "", rate: "", length: "",width: "", height: "", massweightVNP: "", calweightVNP: "", priceweightVNP: "", lengthVNP: "", widthVNP: "", heightVNP: "", pathPicture: ""}
+var dataGDAQ = {user: "", barcode: "", massweight:"", calweight: "", priceweight: "", diffweight: "", rate: "", length: "",width: "", height: "", massweightVNP: "", calweightVNP: "", priceweightVNP: "", lengthVNP: "", widthVNP: "", heightVNP: "", pathPicture: "", created_at: ""}
+var rawData = {barcode: "", rawScale:"", rawU81: ""}
 let massWeight ='';
 let CalWeight = '';
 let priceWeight ='';
@@ -56,28 +58,13 @@ io.on('connection',(socket)=>{
       io.sockets.emit('calibVal', {Val:"(D:"+lengthCalib+"mm "+"R: "+widthCalib+"mm "+"C: "+heightCalib+"mm)"});
     });
     });
+    socket.on('user', function(data){
+      dataGDAQ.user = data.us;
+    })
 });
-
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
-
-/**
- * Normalize a port into a number, string, or false.
- */
-/*Listen Event barcode to Emit data */
-
-// function Calculate(barcode, IsAirmail, length, width, height){
-//   var serviceCode = barcode.substring(0,1);
-//   if((serviceCode== 'C'||serviceCode=='P'||serviceCode=='U') && IsAirmail==false){
-//       return ((length*width*height)/4000).toFixed(0);
-//   }
-//   else{
-//       return ((length*width*height)/6000).toFixed(0);
-//   }
-// }
-
-
 ///////////////get data Calib sensors from DB/////////////////////////
 
 /////////////////////////////////////////////////////////////
@@ -89,10 +76,9 @@ barcodeController.portBarcode.on('data', (dataBarcode)=>{
   var takePictureCam = new cameraController.takePicture();
   const portScale = new SerialPort('/dev/ttyUSB1', { baudRate: 19200, dataBits: 8, parity: 'none', parsers: new Readline("\r\n")});
   const portSS = new SerialPort('/dev/ttyUSB0', { baudRate: 19200, dataBits: 8, parity: 'none'});
-  dataGDAQ.barcode = dataBarcode.toString();
+  rawData.barcode = dataGDAQ.barcode = dataBarcode.toString();
   io.sockets.emit('barcode', {barcode: dataBarcode.toString()});
   serviceVNP.vnpService(token, dataBarcode.toString()).then((svrRes)=>{
-    
     dataVNP = JSON.parse(svrRes);
     if(dataVNP.Weight != null){massWeightVNP = dataVNP.Weight; dataGDAQ.massweightVNP=dataVNP.Weight;}
     else{massWeightVNP = '-'; dataGDAQ.massweightVNP ='';}
@@ -112,7 +98,7 @@ barcodeController.portBarcode.on('data', (dataBarcode)=>{
       console.log(dataScale);
       massWeight = dataScale.weigh*1000;
       dataGDAQ.massweight = massWeight;
-      //dataGDAQ.rawScale = JSON.stringify(dataScale);
+      rawData.rawScale = JSON.stringify(dataScale);
       io.sockets.emit('weight', {massweight: massWeight, h1: dataScale.header1, msg: dataScale.message});
   });
     // * Get value Calib*//
@@ -127,7 +113,7 @@ barcodeController.portBarcode.on('data', (dataBarcode)=>{
     //////////////////////
   u81Controller.OneShotReadU81(portSS, u81Controller.constU81.oneshot1,u81Controller.constU81.oneshot2, u81Controller.constU81.oneshot3).then((dataU81)=>{
       console.log(dataU81);
-     // dataGDAQ.rawU81 = JSON.stringify(dataU81);
+        rawData.rawU81 = JSON.stringify(dataU81);
         //console.log(lengthCalib-widthCalib);
         //push data to object
         var lengthPercel ='-';
@@ -139,11 +125,10 @@ barcodeController.portBarcode.on('data', (dataBarcode)=>{
         dataGDAQ.length = lengthPercel;
         dataGDAQ.height = widthPercel;
         dataGDAQ.width = heightPercel;
+        dataGDAQ.created_at = dataU81.Time;
         CalWeight = calCulate.Cal(dataBarcode.toString(), isAirmail, lengthPercel, widthPercel, heightPercel);
         //console.log(massWeight);
-        if(CalWeight>massWeight){
-          priceWeight = CalWeight;
-        }else{ priceWeight = massWeight;}
+        if(CalWeight>massWeight){priceWeight = CalWeight;}else{ priceWeight = massWeight;}
         dataGDAQ.calweight = CalWeight;
         dataGDAQ.priceweight = priceWeight;
         /////////////emit data////////////////////////////////////////////////////////////////
@@ -159,12 +144,15 @@ barcodeController.portBarcode.on('data', (dataBarcode)=>{
       io.emit('dataVNP', {weight: massWeightVNP, calweight: CalWeightVNP, priceweight: priceWeightVNP, length: lengthVNP, width: widthVNP, height: heightVNP, diffW: diffWeight, Rate: rate, isAir: isAirmail});
       takePictureCam.then((PicturePath, err)=>{
         if (err) throw err;
-        dataGDAQ.pathPicture = "http://localhost:3000"+(PicturePath.split("../public"))[1].toString();
+        dataGDAQ.pathPicture = host+(PicturePath.split("../public"))[1].toString();
         var picturepath = PicturePath;
         console.log(picturepath);
         io.sockets.emit('picture', {picturePath:  PicturePath});//.split("../public")
         //console.log(dataGDAQ);
         knex('tbdata').insert(dataGDAQ).then((result)=>{
+          console.log("success insert to DB ! ");
+        });
+        knex('rawdata').insert(rawData).then(()=>{
           console.log("success insert to DB ! ");
         });
     });

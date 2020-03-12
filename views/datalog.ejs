@@ -29,6 +29,7 @@
       <input type="submit" value="Submit">
     </form>
     <a href="/export2excel"><button>Export Excel</button></a>
+  
     <!-- ... -->
     <table>
       <col width="1%">
@@ -87,7 +88,7 @@
       <tr>
         <td><%=(i+1)%></td>
         <td><%=dataGDAQ[i].created_at%></td>
-        <td>Khanh Tong</td>
+        <td><%=dataGDAQ[i].user%></td>
         <td><%=dataGDAQ[i].barcode%></td>
         <td><%=dataGDAQ[i].massweight%></td>
         <td><%=dataGDAQ[i].calweight%></td>

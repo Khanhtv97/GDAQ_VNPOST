@@ -14,7 +14,7 @@ function sleep(milliseconds) {
     } while (currentDate - date < milliseconds);
   }
 function parserDataScale(rawData){
-    var dataObj = {header1: "", header2: "", sign: "",weigh: "", unit: "", message: ""};
+    var dataObj = {header1: "", header2: "", sign: "",weigh: "", unit: "", message: "", raw:""};
     Header1 = rawData.substring(0, 2);
     Header2 = rawData.substring(3, 5);
     Sign = rawData.substring(6, 7);
@@ -33,6 +33,7 @@ function parserDataScale(rawData){
     }else if(Header1 !='ST'&&Header1!='OL'&&Header1!='US'){
         dataObj.message ="Can chua san sang, cho 2s va quet lai !";
     }
+    dataObj.raw = rawData;
     return dataObj;
 }
 function readData(port) {

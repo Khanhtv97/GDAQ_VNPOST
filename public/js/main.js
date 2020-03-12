@@ -1,4 +1,6 @@
 var socket = io.connect('http://192.168.0.231:3000'); //connect to server
+        var user = document.getElementById('user').innerText;
+        socket.emit('user', {us: user});
         socket.on('calibVal', function(data){
             document.getElementById('Calib').innerHTML = data.Val;
         });
@@ -48,7 +50,7 @@ var socket = io.connect('http://192.168.0.231:3000'); //connect to server
         });
         socket.on('picture', function(data){
             document.getElementById('ifr1').src = (data.picturePath.split("../public"))[1].toString();
-            console.log((data.picturePath.split("../public"))[1].toString());//,/imagesItem/20200306181315.jpg
+            //console.log((data.picturePath.split("../public"))[1].toString());//,/imagesItem/20200306181315.jpg
         });
         socket.on('dataVNP', function(data){
             document.getElementById('vnpostWeigh').innerHTML = data.weight; //vnpostCal
@@ -61,9 +63,8 @@ var socket = io.connect('http://192.168.0.231:3000'); //connect to server
             if(data.diffW >300){document.getElementById('diffWeigh').style.background ='red'; document.getElementById('rate').style.background ='red';}
             else{document.getElementById('diffWeigh').style.background ='gray';document.getElementById('rate').style.background ='gray';}
             document.getElementById('rate').innerHTML = data.Rate; //isAir
-            if(data.isAir ==true){
-            document.getElementById('spAirScK').innerHTML = "Đường Bay"
-            }else{document.getElementById('spAirScK').innerHTML = "Đường Bộ"}
+            if(data.isAir ==true){document.getElementById('spAirScK').innerHTML = "Đường Bay"}
+            else if(data.isAir ==false){document.getElementById('spAirScK').innerHTML = "Đường Bộ"}
+            else{document.getElementById('spAirScK').innerHTML = "---"}
         });
-        
         //vnpostWeigh
