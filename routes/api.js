@@ -141,4 +141,27 @@ function checkNotAuthenticated(req, res, next) {
   }
   next()
 }
+
+
+/** Shut down and reboot */
+var exec = require('child_process').exec;
+
+router.get('/shutdown', function(req, res){
+  shutdown(function(output){
+    console.log(output);
+});
+})
+router.get('/reboot', function(req, res){
+  reboot(function(output){
+    console.log(output);
+});
+});
+// Create shutdown function
+function shutdown(callback){
+    exec('shutdown now', function(error, stdout, stderr){ callback(stdout); });
+}
+function reboot(callback){
+  exec('shutdown -r now', function(error, stdout, stderr){ callback(stdout); });
+}
+/**END */
 module.exports = router;

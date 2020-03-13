@@ -51,5 +51,7 @@ app.use('/register', appRoutes);
 //datalog page
 app.use('/config', appRoutes);
 app.use('/rawData', appRoutes);
+app.use('/shutdown', appRoutes);
+app.use('/reboot', appRoutes);
 
 module.exports = app;

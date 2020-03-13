@@ -62,13 +62,13 @@ function parserDataU81(rawData){
         sqW = converter.hexToDec("0x"+rawWith.substring(20, 24));
         width.signalQuality = sqW;
         if(sqW>ideaSQ){
-            width.message = "Rong: Chat luong do kem, hay dung tam chan !"
+            width.message = "Rộng SQ="+sqW+": Chất lượng đo kém, hãy dùng tấm chắn !"
         }
     }
     else if (t2 !=-1){
         rawWith = rawData.substring(t2, t2+18);
         width.errorCode = rawWith.substring(14, 16);
-        width.message = 'Rong: '+ getErrorMessage(rawWith.substring(14, 16));
+        width.message = 'Rộng: '+ getErrorMessage(rawWith.substring(14, 16));
     }
     if(t3 != -1){
         rawHeight =  rawData.substring(t3, t3+26);
@@ -77,7 +77,7 @@ function parserDataU81(rawData){
         sqH = converter.hexToDec("0x"+rawHeight.substring(20, 24));
         height.signalQuality = sqH;
         if(sqH>ideaSQ){
-            height.message = "Cao: chat luong do kem, hay dung tam chan !"
+            height.message = "Cao SQ="+sqH+": Chất lượng đo kém, hãy dùng tấm chắn !"
         }
     }
     else if (t4 !=-1){
@@ -92,7 +92,7 @@ function parserDataU81(rawData){
         sqL = converter.hexToDec("0x"+rawLength.substring(20, 24));
         length.signalQuality = sqL;
         if(sqL>ideaSQ){
-            length.message = "Dai: Chat luong do kem, hay dung tam chan !"
+            length.message = "Dài SQ="+sqL+": Chất lượng đo kém, hãy dùng tấm chắn !"
         }
     }
     else if (t6 !=-1){
