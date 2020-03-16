@@ -48,7 +48,7 @@ function parserDataU81(rawData){
     let minutes = date_ob.getMinutes();
     let seconds = date_ob.getSeconds();
     let datetime = year + "-" + month + "-" + date + " " + hours + ":" + minutes + ":" + seconds;
-    var data = {Time: datetime, W: "", H:"", L:"", rawData: rawData};
+    var data = {Time: datetime, W: "", H:"", L:"", rawData: rawData, check: ""};
     var width = {errorCode: "", Wmm: "", signalQuality: "", message: ""};
     var height = {errorCode: "", Hmm: "", signalQuality: "", message: ""};
     var length = {errorCode: "", Lmm: "", signalQuality: "", message: ""};
@@ -103,8 +103,9 @@ function parserDataU81(rawData){
     data.W =width;
     data.H = height;
     data.L = length;
+    if(width.message!=''&&length.message!=''&&height.message!=''){ data.check =1;} //message != null mean with no error
+    else{data.check=0;}
     return data;
-
 }
 function getErrorMessage(code){
     switch(code){

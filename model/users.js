@@ -11,3 +11,10 @@ knex.schema
         t.integer('role');
     })}
 });
+knex.select().table('users').then((data)=>
+    {
+      data.map(function(row){
+        console.log(row)
+      })
+    }
+    )

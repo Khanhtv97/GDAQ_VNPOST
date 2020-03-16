@@ -67,9 +67,8 @@ server.on('error', onError);
 server.on('listening', onListening);
 ///////////////get data Calib sensors from DB/////////////////////////
 
+
 /////////////////////////////////////////////////////////////
-
-
 /* */
 barcodeController.portBarcode.on('data', (dataBarcode)=>{
   console.log(dataBarcode.toString());
@@ -144,7 +143,7 @@ barcodeController.portBarcode.on('data', (dataBarcode)=>{
       io.emit('dataVNP', {weight: massWeightVNP, calweight: CalWeightVNP, priceweight: priceWeightVNP, length: lengthVNP, width: widthVNP, height: heightVNP, diffW: diffWeight, Rate: rate, isAir: isAirmail});
       takePictureCam.then((PicturePath, err)=>{
         if (err) throw err;
-        dataGDAQ.pathPicture = host+(PicturePath.split("../public"))[1].toString();
+        dataGDAQ.pathPicture = (PicturePath.split("../public"))[1].toString();
         var picturepath = PicturePath;
         console.log(picturepath);
         io.sockets.emit('picture', {picturePath:  PicturePath});//.split("../public")
@@ -157,12 +156,10 @@ barcodeController.portBarcode.on('data', (dataBarcode)=>{
         });
     });
   })
- 
 });
 ////////////////////////////////////
 function normalizePort(val) {
   var port = parseInt(val, 10);
-
   if (isNaN(port)) {
     // named pipe
     return val;

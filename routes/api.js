@@ -8,6 +8,7 @@ var u81Controller = require('../controller/u81Controller');
 const SerialPort = require('serialport'); 
 var io = require('socket.io')(require('../bin/server'));
 var export2excel = require('../services/export2excel');
+var UserX = require('../controller/userController')
 //**For authen */
 const bcrypt = require('bcrypt');
 const passport = require('passport')
@@ -81,10 +82,15 @@ router.get('/config', function(req, res, next){
   }else{
     console.log("calib faile");
   }
-    
   });
 });
-
+router.get('/users', checkAuthenticated, (req, res) => {
+  
+  knex.select().table('users').then((data)=> 
+  {
+    res.render('usersManage.ejs', {users: data});
+  });
+});
 /*Login and register */
 /* GET login page. */
 router.get('/login', checkNotAuthenticated, (req, res) => {
@@ -111,18 +117,38 @@ router.post('/register', async(req, res)=>{
       id: Date.now().toString(),
       name: req.body.name,
       username: req.body.username,
-      password: hashPassword
+      password: hashPassword,
+      role: req.body.role
     });
-    res.redirect('/login');
-
-
+    res.redirect('/users');
   }catch{
-    res.redirect('register');
+    res.redirect('/users');
 
   }
   knex('users').insert(users).then((data)=>{
     console.log("success to create Users")
   })
+});
+router.post('/updateUser', async(req, res)=>{
+  try{
+    const hashPassword = await bcrypt.hash(req.body.password, 10);
+    knex('users').where('id', req.body.id).update({
+      name: req.body.name,
+      username: req.body.username,
+      password: hashPassword,
+      role: req.body.role}).then((err)=>{
+        throw err;
+    })
+    res.redirect('/users');
+  }catch{
+    res.redirect('/users');
+  }
+});
+router.post('/deleteUser', function deleteUser(req, res, next){
+  knex('users').where('id',req.body.id).del().then((result)=>{
+      res.redirect('/users');
+  })
+  .catch(err => next(err));
 });
 router.delete('/logout', (req, res) => {
   req.logOut()
@@ -132,7 +158,6 @@ function checkAuthenticated(req, res, next) {
   if (req.isAuthenticated()) {
     return next()
   }
-
   res.redirect('/login')
 }
 function checkNotAuthenticated(req, res, next) {
@@ -141,7 +166,22 @@ function checkNotAuthenticated(req, res, next) {
   }
   next()
 }
+/**END USERS */
+/*SETTING*/
+router.get('/setting', function(req, res){
+  res.render('setting');
+});
 
+
+router.get('/configdevice', checkAuthenticated, (req, res) => {
+  
+  knex.select().table('devices').then((data)=> 
+  {
+      res.render('config.ejs', {devices: data});
+  });
+});
+
+/*END SETTING*/
 
 /** Shut down and reboot */
 var exec = require('child_process').exec;

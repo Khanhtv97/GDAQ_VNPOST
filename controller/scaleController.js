@@ -14,7 +14,9 @@ function sleep(milliseconds) {
     } while (currentDate - date < milliseconds);
   }
 function parserDataScale(rawData){
-    var dataObj = {header1: "", header2: "", sign: "",weigh: "", unit: "", message: "", raw:""};
+    var dataObj = {header1: "", header2: "", sign: "",weigh: "", unit: "", message: "", raw:"", check: ""};
+    // t1 = rawData.indexOf("ST");
+    // t2 = indexOf("GS");
     Header1 = rawData.substring(0, 2);
     Header2 = rawData.substring(3, 5);
     Sign = rawData.substring(6, 7);
@@ -25,14 +27,10 @@ function parserDataScale(rawData){
     dataObj.sign = Sign;
     dataObj.weigh = Weight;
     dataObj.unit =Unit;
-    if(Header1 == 'US'){
-        dataObj.message = "Cân không ổn định, Chờ ổn định và quét lại !";
-    }
-    else if (Header1 =="OL"){
-       dataObj.message = "Cân quá tải !";
-    }else if(Header1 !='ST'&&Header1!='OL'&&Header1!='US'){
-        dataObj.message ="Can chua san sang, cho 2s va quet lai !";
-    }
+    if(Header1 == 'US'){dataObj.message = "Cân không ổn định, Chờ ổn định và quét lại !";dataObj.check =0;}
+    else if (Header1 =="OL"){dataObj.message = "Cân quá tải !"; dataObj.check =0;}
+    else if(Header1=='ST'){dataObj.check =1;}
+    else{dataObj.message ="Can chua san sang, cho 2s va quet lai !"; dataObj.check =0;}
     dataObj.raw = rawData;
     return dataObj;
 }

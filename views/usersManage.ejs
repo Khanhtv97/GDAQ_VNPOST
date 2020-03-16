@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Config Device</title>
+<title>User Management</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -26,10 +26,10 @@ $(document).ready(function(){
             <div class="table-title">
                 <div class="row">
                     <div class="col-sm-6">
-						<h2>Cau Hinh Thiet Bi<b></b></h2>
+						<h2>Quản lý tài khoản<b></b></h2>
 					</div>
 					<div class="col-sm-6">
-						<a href="#addEmployeeModal" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Thêm thiet bi</span></a>						
+						<a href="#addEmployeeModal" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Thêm tài khoản</span></a>						
 					</div>
                 </div>
             </div>
@@ -37,36 +37,35 @@ $(document).ready(function(){
                 <thead>
                     <tr>
 						<th>STT</th>
-                        <th>Tên thiet bi</th>
-                        <th>Port</th>
-						<th>Baurate</th>
-                        <th>Data bits</th>
-                        <th>Stop bits</th>
-                        <th>Parity</th>
+                        <th>Tên</th>
+                        <th>Tài khoản</th>
+						<th>Mật khẩu</th>
+                        <th>Phân quyền</th>
                         <th>Actions</th>
-                        
                     </tr>
                 </thead>
                 <tbody>
-					<% if(devices.length){ 
-						for(var i = 0;i < devices.length;i++) { %>
+					<% if(users.length){ 
+						for(var i = 0;i < users.length;i++) { %>
                     <tr>
 						<td><%=(i+1)%></td>
-                        <td><%=devices[i].name%></td>
-                        <td><%=devices[i].port%></td>
-                        <td><%=devices[i].baurate%></td>
-                        <td><%=devices[i].databits%></td>
-                        <td><%=devices[i].stopbits%></td>
-                        <td><%=devices[i].parity%></td>
+                        <td><%=users[i].name%></td>
+                        <td><%=users[i].username%></td>
+						<td><%=users[i].password%></td>
+						<% if(users[i].role==1){ %>
+							<td>Quan Ly</td>
+						<% }else{%>
+							<td>Nhan vien</td>
+							<%}%>
                         <td>
-                            <a href="#editEmployeeModal" class="edit" data-toggle="modal" ><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-                            <a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+                            <a href="#editEmployeeModal" class="edit" data-toggle="modal" data-id="<%=users[i].id%>" data-name="<%=users[i].name%>" data-username="<%=users[i].username%>"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+                            <a href="#deleteEmployeeModal" class="delete" data-toggle="modal" data-id="<%=users[i].id%>"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
                         </td>
 					</tr>
 					<% }
       				}else{ %>
      				<tr>
-        				<td colspan="3">No Devices</td>
+        				<td colspan="3">No users</td>
       				</tr>
     				<% } %>
                 </tbody>

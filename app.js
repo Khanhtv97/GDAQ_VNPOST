@@ -53,5 +53,6 @@ app.use('/config', appRoutes);
 app.use('/rawData', appRoutes);
 app.use('/shutdown', appRoutes);
 app.use('/reboot', appRoutes);
+app.use('/setting', appRoutes);
 
 module.exports = app;

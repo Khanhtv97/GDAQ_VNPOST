@@ -14,6 +14,17 @@
   }
   tr:nth-child(even){background-color: #f2f2f2;}
   tr:hover {background-color: #ddd;}
+  img {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 5px;
+  width: 100px;
+  height: 50;
+}
+
+img:hover {
+  box-shadow: 0 0 2px 1px rgba(0, 140, 186, 0.5);
+}
   </style>
   <body>
     <h1>Bang thong ke du lieu so sanh</h1>
@@ -104,7 +115,10 @@
         <td><%=dataGDAQ[i].lengthVNP%></td>
         <td><%=dataGDAQ[i].widthVNP%></td>
         <td><%=dataGDAQ[i].heightVNP%></td>
-        <td><link> <%=dataGDAQ[i].pathPicture%></link></td>
+        <!-- <td><%=dataGDAQ[i].pathPicture%></td> -->
+        <td><a target="_blank" href="<%=dataGDAQ[i].pathPicture%>">
+          <img src="<%=dataGDAQ[i].pathPicture%>" alt="Forest" style="width:150px">
+        </a></td>
       </tr>
       <% }
       }else{ %>
