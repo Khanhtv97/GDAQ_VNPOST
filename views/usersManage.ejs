@@ -30,6 +30,7 @@ $(document).ready(function(){
 					</div>
 					<div class="col-sm-6">
 						<a href="#addEmployeeModal" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Thêm tài khoản</span></a>						
+					    <a href="/setting" class="btn btn-danger"> <span>Quay lại</span></a>
 					</div>
                 </div>
             </div>
@@ -53,9 +54,9 @@ $(document).ready(function(){
                         <td><%=users[i].username%></td>
 						<td><%=users[i].password%></td>
 						<% if(users[i].role==1){ %>
-							<td>Quan Ly</td>
+							<td>Quản lý</td>
 						<% }else{%>
-							<td>Nhan vien</td>
+							<td>Nhân viên</td>
 							<%}%>
                         <td>
                             <a href="#editEmployeeModal" class="edit" data-toggle="modal" data-id="<%=users[i].id%>" data-name="<%=users[i].name%>" data-username="<%=users[i].username%>"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
@@ -97,13 +98,13 @@ $(document).ready(function(){
 						<div class="form-group">
 							<label>Phân quyền</label>
 							<select name="role" >
-								<option value="1">Quan ly</option>
-								<option value="0">Nhan vien</option>
+								<option value="1">Quản lý</option>
+								<option value="0">Nhân viên</option>
 							</select>
 						</div>					
 					</div>
 					<div class="modal-footer">
-						<input type="button" class="btn btn-default" data-dismiss="modal" value="Huy">
+						<input type="button" class="btn btn-default" data-dismiss="modal" value="Hủy">
 						<input type="submit" class="btn btn-success" value="Thêm">
 					</div>
 				</form>
@@ -116,7 +117,7 @@ $(document).ready(function(){
 			<div class="modal-content">
 				<form action= "/updateUser" method= "POST">
 					<div class="modal-header">						
-						<h4 class="modal-title">Cap nhat tai khoan</h4>
+						<h4 class="modal-title">Cập nhật tài khoản</h4>
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 					</div>
 					<div class="modal-body">	
@@ -138,14 +139,14 @@ $(document).ready(function(){
 						<div class="form-group">
 							<label>Phân quyền</label>
 							<select name="role" >
-								<option value="1">Quan ly</option>
-								<option value="0">Nhan vien</option>
+								<option value="1">Quản lý</option>
+								<option value="0">Nhân viên</option>
 							</select>
 						</div>					
 					</div>
 					<div class="modal-footer">
-						<input type="button" class="btn btn-default" data-dismiss="modal" value="Huy">
-						<input type="submit" class="btn btn-success" value="Cap Nhat">
+						<input type="button" class="btn btn-default" data-dismiss="modal" value="Hủy">
+						<input type="submit" class="btn btn-success" value="Cập nhật">
 					</div>
 				</form>
 			</div>
@@ -157,19 +158,19 @@ $(document).ready(function(){
 			<div class="modal-content">
 				<form action= "/deleteUser" method= "POST">
 					<div class="modal-header">						
-						<h4 class="modal-title">Delete Employee</h4>
+						<h4 class="modal-title">Xóa người dùng</h4>
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 					</div>
 					<div class="modal-body">					
-						<p>Are you sure you want to delete these Records?</p>
-						<p class="text-warning"><small>This action cannot be undone.</small></p>
+						<p>Bạn có chắc chắn xóa người dùng này không?</p>
+						
 					</div>
 					<div class="form-group" type= "hidden">
 						<input type="hidden" id="inputID" type="text" name="id">
 					</div>	
 					<div class="modal-footer">
-						<input type="button" class="btn btn-default" data-dismiss="modal" value="Huy">
-						<input type="submit" class="btn btn-danger" value="Xoa">
+						<input type="button" class="btn btn-default" data-dismiss="modal" value="Hủy">
+						<input type="submit" class="btn btn-danger" value="Xóa">
 					</div>
 				</form>
 			</div>

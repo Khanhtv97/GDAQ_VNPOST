@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="css/setting.css">
+    <title>Setting</title>
+</head>
+<body>
+    <div class="container">
+        <div class="table-wrapper">
+        <div class="table-title">
+            <div class="row">
+                <div class="col-sm-6">
+                    <h2>Cài đặt cho nha san xuat<b></b></h2>
+                </div>
+                <div class="col-sm-6">
+                    <a href="/setting" class="btn btn-success"> <span>Quay lại</span></a>						
+                </div>
+            </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-2"></div>
+          <div class="col-sm-3">
+            <div class="card" style="width: 15rem;">
+                <img class="card-img-top" src="/images/config.png" alt="Card image cap">
+                <div class="card-body">
+                  <a href="/configdevice" class="btn btn-info" data-toggle="modal"><span>Cau hinh thiet bi</span></a>
+                </div>
+              </div>
+          </div>
+          <div class="col-sm-2"></div>
+          <div class="col-sm-3">
+            <div class="card" style="width: 15rem;">
+                <img class="card-img-top" src="/images/replace.png" alt="Card image cap">
+                <div class="card-body">
+                  <a href="#" class="btn btn-info" data-toggle="modal"><span>Thay the thiet bi</span></a>
+                </div>
+              </div>
+          </div>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</body>
+</html>
+
+<script>
+  $('#newpass, #confirm_newpass').on('keyup', function () {
+  if ($('#newpass').val() == $('#confirm_newpass').val()) {
+    $('#message').html('Trung khop').css('color', 'green');
+  } else 
+    $('#message').html('Khong trung').css('color', 'red');
+});
+</script>

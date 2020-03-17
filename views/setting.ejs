@@ -17,34 +17,143 @@
         <div class="table-title">
             <div class="row">
                 <div class="col-sm-6">
-                    <h2>Cai dat<b></b></h2>
+                    <h2>Cài đặt<b></b></h2>
                 </div>
                 <div class="col-sm-6">
-                    <a href="/" class="btn btn-success"> <span>Back</span></a>						
+                    <a href="/" class="btn btn-success"> <span>Quay lại</span></a>						
                 </div>
             </div>
         </div>
         <div class="row">
-        <div class="col-sm-2"></div>
           <div class="col-sm-4">
-            <div class="card" style="width: 18rem;">
-                <img class="card-img-top" src="/images/userM.png" alt="Card image cap">
+            <div class="card" style="width: 15rem;">
+                <img class="card-img-top" src="/images/changpass.png" alt="Card image cap">
                 <div class="card-body">
-                  <a href="/users" class="btn btn-success">Quan Ly Nguoi Dung</a>
+                  <a href="#changepassword" class="btn btn-info" data-toggle="modal"><span>Thay đổi mật khẩu</span></a>
                 </div>
               </div>
           </div>
           <div class="col-sm-4">
-            <div class="card" style="width: 18rem;">
-                <img class="card-img-top" src="/images/config.png" alt="Card image cap">
+            <div class="card" style="width: 15rem;">
+                <img class="card-img-top" src="/images/admin.png" alt="Card image cap">
                 <div class="card-body">
-                  <a href="/configdevice" class="btn btn-success">Cai dat cau hinh</a>
+                  <a href="#adminControl" class="btn btn-info" data-toggle="modal"><span>Dành cho cán bộ quản lý</span></a>
+                  <% if (messages.error) { %>
+                   <span><%= messages.error %></span> 
+                  <% } %>
+                </div>
+                
+              </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="card" style="width: 15rem;">
+                <img class="card-img-top" src="/images/manufacture.png" alt="Card image cap">
+                <div class="card-body">
+                  <a href="#manufactureControl" class="btn btn-info" data-toggle="modal"><span>Dành cho nhà sản xuất</span></a>
+                  <% if (messages.error) { %>
+                   <span><%= messages.error %></span> 
+                  <% } %>
                 </div>
               </div>
           </div>
-          <div class="col-sm-2"></div>
         </div>
       </div>
     </div>
+    <div id="changepassword" class="modal fade">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <form action= "/changepassword" method= "POST">
+            <div class="modal-header">						
+              <h4 class="modal-title">Thay đổi mật khẩu</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modal-body">	
+              <div class="form-group" >
+                <input type="hidden"  id="inputID" type="text" name="id" value="<%=iduser%>">
+              </div>					
+              <div class="form-group">
+                <label>Nhập mật khẩu hiện tại</label>
+                <input type="password" class="form-control" name= "oldpass" required>
+              </div>
+              <div class="form-group">
+                <label>Nhập mật khẩu mới</label>
+                <input id="newpass" type="password" class="form-control" name="newpass" required>
+              </div>
+              <div class="form-group">
+                <label>Nhập lại mật khẩu mới</label>
+                <input id="confirm_newpass" type="password" class="form-control" name="Confirmnewpass" required>
+                <span id='message'></span>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <input type="button" class="btn btn-default" data-dismiss="modal" value="Hủy">
+              <input type="submit" class="btn btn-success" value="Thay đổi">
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div id="adminControl" class="modal fade">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <form action= "/loginadmin" method= "POST">
+            <div class="modal-header">						
+              <h4 class="modal-title">Vui lòng đăng nhập để truy cập</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modal-body">					
+              <div class="form-group">
+                <label>Tài khỏan</label>
+                <input type="text" class="form-control" name= "username" required>
+              </div>
+              <div class="form-group">
+                <label>Mật khẩu</label>
+                <input type="password" class="form-control" name="password" required>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <input type="button" class="btn btn-default" data-dismiss="modal" value="Hủy">
+              <input type="submit" class="btn btn-success" value="Truy cập">
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div id="manufactureControl" class="modal fade">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <form action= "/loginmanufacture" method= "POST">
+            <div class="modal-header">						
+              <h4 class="modal-title">Vui lòng đăng nhập để truy cập</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modal-body">					
+              <div class="form-group">
+                <label>Tài khoản</label>
+                <input type="text" class="form-control" name= "username" required>
+              </div>
+              <div class="form-group">
+                <label>Mật khẩu</label>
+                <input type="password" class="form-control" name="password" required>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <input type="button" class="btn btn-default" data-dismiss="modal" value="Hủy">
+              <input type="submit" class="btn btn-success" value="Truy cập">
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
 </body>
 </html>
+
+<script>
+  $('#newpass, #confirm_newpass').on('keyup', function () {
+  if ($('#newpass').val() == $('#confirm_newpass').val()) {
+    $('#message').html('Trung khop').css('color', 'green');
+  } else 
+    $('#message').html('Khong trung').css('color', 'red');
+});
+</script>

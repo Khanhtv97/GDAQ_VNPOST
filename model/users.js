@@ -14,7 +14,4 @@ knex.schema
 knex.select().table('users').then((data)=>
     {
       data.map(function(row){
-        console.log(row)
-      })
-    }
-    )
+        console.log(row.password)})})

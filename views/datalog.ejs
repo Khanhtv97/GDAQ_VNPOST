@@ -27,8 +27,6 @@ img:hover {
 }
   </style>
   <body>
-    <h1>Bang thong ke du lieu so sanh</h1>
-   
     <!-- date time picker -->
     <form action="/datalog">
       <label for="from">From:</label>
@@ -37,42 +35,12 @@ img:hover {
       <label for="to">To:</label>
       <input type="date" id="to" name="todate">
       <input type="time" id="from" name="totime">
-      <input type="submit" value="Submit">
+      <input type="submit" value="Filter">
     </form>
     <a href="/export2excel"><button>Export Excel</button></a>
   
     <!-- ... -->
     <table>
-      <col width="1%">
-        <col width="100px">
-        <col width="1%">
-        <col width="1%">
-        <col width="1%">
-        <col width="1%">
-        <col width="1%">
-        <col width="1%">
-        <col width="1%">
-        <col width="1%">
-        <col width="1%">
-        <col width="100%">
-        <col width="1%">
-        <col width="1%">
-        <col width="1%">
-        <col width="1%">
-        <col width="1%">
-        <col width="1%">
-        <col width="1%">
-        <col width="1%">
-        <col width="1%">
-        <col width="100%">
-        <col width="1%">
-        <col width="1%">
-        <col width="1%">
-        <col width="1%">
-        <col width="1%">
-        <col width="1%">
-        <col width="1%">
-        <col width="1%">
       <tr>
         <th width="50px">STT</th>
         <th>Thoi gian</th>
@@ -123,7 +91,7 @@ img:hover {
       <% }
       }else{ %>
       <tr>
-        <td colspan="3">No data</td>
+        <td colspan="19">No data</td>
       </tr>
     <% } %>
     </table>

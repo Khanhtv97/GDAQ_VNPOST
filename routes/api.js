@@ -8,7 +8,8 @@ var u81Controller = require('../controller/u81Controller');
 const SerialPort = require('serialport'); 
 var io = require('socket.io')(require('../bin/server'));
 var export2excel = require('../services/export2excel');
-var UserX = require('../controller/userController')
+var UserController = require('../controller/userController');
+var DeviceController = require('../controller/deviceController');
 //**For authen */
 const bcrypt = require('bcrypt');
 const passport = require('passport')
@@ -17,7 +18,7 @@ initializePassport(
   passport,
   username => listUsers.find(user => user.username === username),
   id => listUsers.find(user => user.id === id))
-const users = []
+
 const listUsers = [] //get list user available
 
 //////////////////////////////////////////////////////////////////////
@@ -57,7 +58,6 @@ router.get('/rawData', function(req, res){
   {
   res.render('raw', {raw: data});
   });
-
 });
 router.get('/export2excel', function(req, res, next){
   knex.select().table('tbdata').orderBy('id', 'desc').then((dataTB)=> //knex.select('*').from('users').havingIn('id', [5, 3, 10, 17])
@@ -66,30 +66,18 @@ router.get('/export2excel', function(req, res, next){
   });
 });
 // * GET config Page */
-router.get('/config', function(req, res, next){
-  var dataCalib = {calibLength: "", calibHeight: "", calibWidth: ""};
-  const portSS = new SerialPort('/dev/ttyUSB0', { baudRate: 19200, dataBits: 8, parity: 'none'});
-  u81Controller.OneShotReadU81(portSS, u81Controller.constU81.oneshot1,u81Controller.constU81.oneshot2, u81Controller.constU81.oneshot3).then((dataU81)=>{
-    if(dataU81.rawData.length ==78){ //make sure no error when calib SS
-    dataCalib.calibLength = dataU81.L.Lmm;
-    dataCalib.calibHeight = dataU81.H.Hmm;
-    dataCalib.calibWidth = dataU81.W.Wmm;
-    knex('tbcalibSS').update(dataCalib).then((result)=>{
-      console.log("success to CALIB SS ! ");
-    });
-    u81Controller.onLaserU81(portSS,u81Controller.constU81.onLaserSS1,u81Controller.constU81.onLaserSS2, u81Controller.constU81.onLaserSS3);
-    res.redirect('/');
-  }else{
-    console.log("calib faile");
-  }
-  });
+router.get('/calibSS',checkAuthenticated, function(req, res, next){
+  DeviceController.Controller.calibSS(req, res, next);
 });
 router.get('/users', checkAuthenticated, (req, res) => {
-  
+  if(req.user.role ==1){
   knex.select().table('users').then((data)=> 
   {
     res.render('usersManage.ejs', {users: data});
   });
+}else{
+  res.redirect('/setting');
+}
 });
 /*Login and register */
 /* GET login page. */
@@ -106,49 +94,18 @@ router.post('/login', checkNotAuthenticated, passport.authenticate('local', {
   failureRedirect: '/login',
   failureFlash: true
 }))
+
 router.get('/register', function(req, res, next){
   res.render('register');
 });
-
-router.post('/register', async(req, res)=>{
-  try{
-    const hashPassword = await bcrypt.hash(req.body.password, 10);
-    users.push({
-      id: Date.now().toString(),
-      name: req.body.name,
-      username: req.body.username,
-      password: hashPassword,
-      role: req.body.role
-    });
-    res.redirect('/users');
-  }catch{
-    res.redirect('/users');
-
-  }
-  knex('users').insert(users).then((data)=>{
-    console.log("success to create Users")
-  })
+router.post('/register', function(req, res){
+  UserController.Controller.register(req, res);
 });
-router.post('/updateUser', async(req, res)=>{
-  try{
-    const hashPassword = await bcrypt.hash(req.body.password, 10);
-    knex('users').where('id', req.body.id).update({
-      name: req.body.name,
-      username: req.body.username,
-      password: hashPassword,
-      role: req.body.role}).then((err)=>{
-        throw err;
-    })
-    res.redirect('/users');
-  }catch{
-    res.redirect('/users');
-  }
+router.post('/updateUser', function(req, res){
+  UserController.Controller.update(req, res);
 });
-router.post('/deleteUser', function deleteUser(req, res, next){
-  knex('users').where('id',req.body.id).del().then((result)=>{
-      res.redirect('/users');
-  })
-  .catch(err => next(err));
+router.post('/deleteUser', function(req, res, next){
+  UserController.Controller.deleteUser(req, res, next);
 });
 router.delete('/logout', (req, res) => {
   req.logOut()
@@ -166,21 +123,53 @@ function checkNotAuthenticated(req, res, next) {
   }
   next()
 }
-/**END USERS */
-/*SETTING*/
-router.get('/setting', function(req, res){
-  res.render('setting');
+router.post('/changepassword',checkAuthenticated, async(req, res, next)=>{
+  UserController.Controller.changepassword(req, res);
 });
 
-
+/**END USERS */
+/*SETTING*/
+router.get('/setting', checkAuthenticated, (req, res) => {
+  res.render('setting', {iduser: req.user.id});
+  knex.table('users').select().then((data)=>{
+    data.map(function(row){
+      listUsers.push(row);
+    });
+  });
+});
+router.get('/manufacturesetting', checkAuthenticated, (req, res) => {
+  res.render('settingManufacture');
+});
 router.get('/configdevice', checkAuthenticated, (req, res) => {
-  
+  if(req.user.role ==1){
   knex.select().table('devices').then((data)=> 
   {
       res.render('config.ejs', {devices: data});
   });
+}else{
+  res.redirect('/setting')
+}
 });
-
+router.post('/adddevice', function(req, res){
+  DeviceController.Controller.adddevice(req, res);
+});
+router.post('/deleteDevice', function(req, res, next){
+  DeviceController.Controller.deleteDevice(req, res, next);
+});
+router.post('/updatedevice', function(req, res, next){
+  DeviceController.Controller.updateDevice(req, res, next);
+});
+router.post('/loginadmin', passport.authenticate('local', {
+  successRedirect: '/users',
+  failureRedirect: '/setting',
+  failureFlash: true
+}))
+// loginmanufacture
+router.post('/loginmanufacture', passport.authenticate('local', {
+  successRedirect: '/configdevice',
+  failureRedirect: '/setting',
+  failureFlash: true
+}))
 /*END SETTING*/
 
 /** Shut down and reboot */

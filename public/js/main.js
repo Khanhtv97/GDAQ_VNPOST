@@ -68,3 +68,5 @@ var socket = io.connect('http://192.168.0.231:3000'); //connect to server
             else{document.getElementById('spAirScK').innerHTML = "---"}
         });
         //vnpostWeigh
+
+function alertFunction(){ alert("Không để bất kì vật gì lên mặt bàn cân !")}

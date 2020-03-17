@@ -49,7 +49,7 @@ app.use('/login', appRoutes);
 //register
 app.use('/register', appRoutes);
 //datalog page
-app.use('/config', appRoutes);
+app.use('/calibSS', appRoutes);
 app.use('/rawData', appRoutes);
 app.use('/shutdown', appRoutes);
 app.use('/reboot', appRoutes);

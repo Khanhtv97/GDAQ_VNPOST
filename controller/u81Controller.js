@@ -178,6 +178,16 @@ function sendonLaser(port, cmd1, cmd2, cmd3) {
         });
     });
 }
+function setAddressSS(port, cmd){
+    return new Promise((resolve, reject)=>{
+        writeAndDrain(port, cmd, ()=>{
+            sleep(300);
+            port.close();
+        });
+
+    });
+
+}
 
 // portSS.open((err)=>{
 //     if(err){
