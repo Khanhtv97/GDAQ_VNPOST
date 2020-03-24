@@ -9,6 +9,7 @@ const SerialPort = require('serialport');
 var io = require('socket.io')(require('../bin/server'));
 var export2excel = require('../services/export2excel');
 var UserController = require('../controller/userController');
+var DataController = require('../controller/dataController');
 var DeviceController = require('../controller/deviceController');
 //**For authen */
 const bcrypt = require('bcrypt');
@@ -44,7 +45,7 @@ router.get('/datalog', function(req, res){
       //})
     })
   }else{
-    knex.select().table('tbdata').orderBy('id', 'desc').limit(50).then((data)=> //knex.select('*').from('users').havingIn('id', [5, 3, 10, 17])
+    knex.select().table('tbdata').orderBy('id', 'desc').limit(200).then((data)=> //knex.select('*').from('users').havingIn('id', [5, 3, 10, 17])
     {
       // data.map(function(row){
           //console.log(data.barocde);
@@ -59,12 +60,32 @@ router.get('/rawData', function(req, res){
   res.render('raw', {raw: data});
   });
 });
+// data controller
+router.get('/submitRecords', function(req, res){
+  knex.select().table('tbdata').orderBy('id', 'desc').where({'check': true, 'isSent': false}).then((data)=> //knex.select('*').from('users').havingIn('id', [5, 3, 10, 17])
+    {
+      res.render('dataSubmit', {dataGDAQ: data, messages: ""});
+    })
+});
+router.post('/submitRecords', function(req, res){
+  DataController.controller.submitdataByID(req, res);
+
+});
+
+router.post('/deleteRecords', function(req, res){
+  DataController.controller.deleteRecords(req, res);
+})
+router.post('/tranferDatatype', function(req, res){
+  DataController.controller.tranferDataType(req, res);
+});
+// export excel
 router.get('/export2excel', function(req, res, next){
   knex.select().table('tbdata').orderBy('id', 'desc').then((dataTB)=> //knex.select('*').from('users').havingIn('id', [5, 3, 10, 17])
   {
     export2excel.exportExcel(dataTB, res);
   });
 });
+////////////////
 // * GET config Page */
 router.get('/calibSS',checkAuthenticated, function(req, res, next){
   DeviceController.Controller.calibSS(req, res, next);
@@ -109,7 +130,7 @@ router.post('/deleteUser', function(req, res, next){
 });
 router.delete('/logout', (req, res) => {
   req.logOut()
-  res.redirect('/login')
+  res.render('login')
 })
 function checkAuthenticated(req, res, next) {
   if (req.isAuthenticated()) {
@@ -125,17 +146,21 @@ function checkNotAuthenticated(req, res, next) {
 }
 router.post('/changepassword',checkAuthenticated, async(req, res, next)=>{
   UserController.Controller.changepassword(req, res);
+  //listUsers.push([]);
 });
 
 /**END USERS */
 /*SETTING*/
 router.get('/setting', checkAuthenticated, (req, res) => {
-  res.render('setting', {iduser: req.user.id});
-  knex.table('users').select().then((data)=>{
-    data.map(function(row){
-      listUsers.push(row);
-    });
-  });
+ 
+  knex.select().table('sendConfig').then((data)=>{
+    res.render('setting', {iduser: req.user.id, sendDataType: data});
+  })
+  // knex.table('users').select().then((data)=>{
+  //   data.map(function(row){
+  //     listUsers.push(row);
+  //   });
+  // });
 });
 router.get('/manufacturesetting', checkAuthenticated, (req, res) => {
   res.render('settingManufacture');
@@ -150,8 +175,9 @@ router.get('/configdevice', checkAuthenticated, (req, res) => {
   res.redirect('/setting')
 }
 });
-router.post('/adddevice', function(req, res){
-  DeviceController.Controller.adddevice(req, res);
+router.post('/adddevices', function(req, res, next){
+  //DeviceController.Controller.adddevice(req, res, next);
+  DeviceController.Controller.addDevice(req, res, next);
 });
 router.post('/deleteDevice', function(req, res, next){
   DeviceController.Controller.deleteDevice(req, res, next);
@@ -170,6 +196,10 @@ router.post('/loginmanufacture', passport.authenticate('local', {
   failureRedirect: '/setting',
   failureFlash: true
 }))
+
+router.post('/setaddress', function(req, res){
+  DeviceController.Controller.setAddressSS(req, res);
+});
 /*END SETTING*/
 
 /** Shut down and reboot */

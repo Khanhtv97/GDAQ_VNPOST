@@ -13,6 +13,7 @@ async function changepassword(req, res){
                 password: hashNewPassword,
                }).then((data)=>{
                 res.render('login')
+                //req.logout();
               })
             }catch{
             }

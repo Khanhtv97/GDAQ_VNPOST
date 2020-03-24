@@ -59,8 +59,11 @@
     <br/>
     <span  style='color:black;'>Bưu Tá (Person): </span>
     <span id= user style='color:black;'><%=user%></span> 
+    <form action="/logout?_method=DELETE" method="POST">
+        <button type="submit">đăng xuất</button>
+    </form>
    
-    <br/><br/>
+    <br/>
     <fieldset style="width: 370px;">
         <legend style="color: black;" >Trạng thái:</legend>
         <span style='color:black;font-size:30px;padding:9px 9px 9px 9px;' id=spAirScK>- - -</span>
@@ -70,7 +73,7 @@
     <!-- <span style='color:black;'>Hiệu chỉnh đo kích thước</span> -->
     <!-- <button id=btLWH0 onclick=lwh0_cal()>Lmm0=725;Wmm0=720;Hmm0=1010</button><br/> -->
     <fieldset style="width: 370px;">
-        <legend style="color: black;">Message:</legend>
+        <legend style="color: black;">Thông báo:</legend>
         <span id = msgSSL style="background:red; color:white; font-size:20px;"></span><br/>
         <span id = msgSSH style="background:red; color:white; font-size:20px;"></span><br/>
         <span id = msgSSW style="background:red; color:white; font-size:20px;"></span><br/>
@@ -83,9 +86,9 @@
     <div id=divDims style='width:100%;text-align:center;'><big></big><!--height:80px;-->
         <table style='width:100%;'>
         <tr style='color:black;'>
-            <td style='width:20%;' >Dài (mm)</td> 
-            <td style='width:20%;' >Rộng (mm)</td>
-            <td style='width:20%;' >Cao (mm)</td> 
+            <td style='width:20%;' >Dài (mm) SQ: <span id= 'SQL'></span></td> 
+            <td style='width:20%;' >Rộng (mm) SQ: <span id= 'SQW'></span></td>
+            <td style='width:20%;' >Cao (mm) SQ: <span id= 'SQH'></span></td> 
             <td rowspan=3><br/>
         <table style="width: 100%;">
             <tr style="font-size:25px;">

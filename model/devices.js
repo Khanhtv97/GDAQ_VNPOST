@@ -8,9 +8,9 @@ knex.schema
         t.string('name').nullable;
         t.string('devicecode').nullable;
         t.string('port').nullable;
-        t.string('baurate').nullable; // var dataGDAQ = {barocde: "", massweigh:"", calweigh, priceweigh, diffweigh, rate, length,width, height, massweighVNP, calweighVNP, priceweighVNP, lengthVNP, widthVNP, heightVNP}
-        t.string('databits').nullable;
-        t.string('stopbits').nullable;
+        t.integer('baurate').nullable; // var dataGDAQ = {barocde: "", massweigh:"", calweigh, priceweigh, diffweigh, rate, length,width, height, massweighVNP, calweighVNP, priceweighVNP, lengthVNP, widthVNP, heightVNP}
+        t.integer('databits').nullable;
+        t.integer('stopbits').nullable;
         t.string('parity').nullable;
         t.string('serialnumber').nullable;
         t.string('mac').nullable;

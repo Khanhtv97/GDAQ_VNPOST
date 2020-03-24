@@ -23,6 +23,7 @@
     "knex": "^0.20.11",
     "method-override": "^3.0.0",
     "morgan": "~1.6.1",
+    "ngrok": "^3.2.7",
     "node-excel-export": "^1.4.4",
     "passport": "^0.4.1",
     "passport-local": "^1.0.0",

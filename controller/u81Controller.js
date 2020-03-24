@@ -1,6 +1,7 @@
 var converter = require('hex2dec');
+const knex = require('knex')(require('../model/connection'));
 const multiSlaves = Buffer.from([0xAA, 0x7F, 0x00, 0x20, 0x00, 0x01, 0x00, 0x00, 0xA0]);
-const readSS1 = Buffer.from([ 0xAA, 0x81, 0x00, 0x22, 0xA3 ]);
+const readSS1 = Buffer.from([ 0xAA, 0x80, 0x00, 0x22, 0xA2 ]);
 const readSS2 = Buffer.from([ 0xAA, 0x82, 0x00, 0x22, 0xA4 ]);
 const readSS3 = Buffer.from([ 0xAA, 0x83, 0x00, 0x22, 0xA5 ]);
 const onLaserSS1 = Buffer.from([0xAA, 0x01, 0x01, 0xBE, 0x00, 0x01, 0x00, 0x01, 0xC2]);
@@ -11,13 +12,26 @@ const continus1 = Buffer.from([0xAA, 0x01, 0x00, 0x20, 0x00, 0x01, 0x00, 0x06, 0
 const oneshot1 = Buffer.from([0xAA, 0x01, 0x00, 0x20, 0x00, 0x01, 0x00, 0x02, 0x24]);
 const oneshot2 = Buffer.from([0xAA, 0x02, 0x00, 0x20, 0x00, 0x01, 0x00, 0x02, 0x25]);
 const oneshot3 = Buffer.from([0xAA, 0x03, 0x00, 0x20, 0x00, 0x01, 0x00, 0x02, 0x26]);
+const setAddressSS1 = Buffer.from([0xAA, 0x00, 0x00, 0x10, 0x00, 0x01,0x00,0x01, 0x12]);
+const setAddressSS2 = Buffer.from([0xAA, 0x00, 0x00, 0x10, 0x00, 0x01,0x00,0x02, 0x13]);
+const setAddressSS3 = Buffer.from([0xAA, 0x00, 0x00, 0x10, 0x00, 0x01,0x00,0x03, 0x14]);
 const SerialPort = require('serialport'); 
 const ideaSQ = 120;
-//const portSS = new SerialPort('/dev/ttyUSB0', { baudRate: 19200, dataBits: 8, parity: 'none'});
+//const portSS = new SerialPort('/dev/ttyS5', { baudRate: 19200, dataBits: 8, parity: 'none'});
 //const Readline = SerialPort.parsers.Readline;
 //const portScale = new SerialPort('COM4', { baudRate: 19200, dataBits: 8, parity: 'none'});
 
 //const parser = port.pipe(new Readline({delimiter: '\n\r'}));
+function getportSensors(){
+    return new Promise((resolve, reject) =>{
+        knex('devices').where('devicecode', 'GBSSensors').select().then((data)=>{
+            data.map(function(row){
+                 //{port: row.port,bauw.bdRate: roaurate, dataBits: row.databits, parity: row.parity }
+                resolve(row);
+            });
+        }).catch (err=> reject(err));
+    })
+}
 function sleep(milliseconds) {
   const date = Date.now();
   let currentDate = null;
@@ -103,7 +117,7 @@ function parserDataU81(rawData){
     data.W =width;
     data.H = height;
     data.L = length;
-    if(width.message!=''&&length.message!=''&&height.message!=''){ data.check =1;} //message != null mean with no error
+    if(width.message==''&&length.message==''&&height.message==''){ data.check =1;} //message != null mean with no error
     else{data.check=0;}
     return data;
 }
@@ -181,12 +195,19 @@ function sendonLaser(port, cmd1, cmd2, cmd3) {
 function setAddressSS(port, cmd){
     return new Promise((resolve, reject)=>{
         writeAndDrain(port, cmd, ()=>{
-            sleep(300);
-            port.close();
+            sleep(600);
+            port.on('readable', ()=>{
+                let chunk;
+                while (null !== (chunk = port.read())) {
+                    resolve((chunk.toString('hex')));
+                  }
+            });
+            port.once('error', (err) => {
+            reject(err);
+            });
+            //port.close();
         });
-
     });
-
 }
 
 // portSS.open((err)=>{
@@ -194,20 +215,26 @@ function setAddressSS(port, cmd){
 //         console.log(err);
 //     }
 // });
+// const portSS = new SerialPort('/dev/ttyS5', { baudRate: 19200, dataBits: 8, parity: 'none'});
+// setAddressSS(portSS, setAddressSS3).then((data)=>{
+//     console.log(data);
+// })
 // module.exports.dataU81 = function(){
+
 // sendOneShotRead(portSS, oneshot1, oneshot2, oneshot3).then((data) => {
-//         return (parserDataU81(data));
+//         console.log ((data));
 //         sendonLaser(portSS, onLaserSS1, onLaserSS2, onLaserSS3);
 //     });
-// }
 // parserDataU81 getErrorMessage writeAndDrain sendOneShotRead sendonLaser
 module.exports.parserDataU81 = parserDataU81;
 // module.exports.getErrorMessageU81 = getErrorMessage;
 // module.exports.writeAndDrain = writeAndDrain;
+module.exports.setAddress = setAddressSS;
 module.exports.OneShotReadU81 = sendOneShotRead;
 module.exports.onLaserU81 = sendonLaser;
+module.exports.portU81 = getportSensors;
 module.exports.constU81 ={
-   oneshot1, oneshot2, oneshot3, onLaserSS1, onLaserSS2, onLaserSS3
+   oneshot1, oneshot2, oneshot3, onLaserSS1, onLaserSS2, onLaserSS3, setAddressSS1, setAddressSS2, setAddressSS3
 }
 
 

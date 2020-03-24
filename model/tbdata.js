@@ -21,6 +21,10 @@ knex.schema
         t.string('lengthVNP', 100).nullable;
         t.string('widthVNP', 100).nullable;
         t.string('heightVNP', 100).nullable;
+        t.string('poscode', 50).nullable;
+        t.boolean('check');
+        t.string('isWrong', 10);
+        t.boolean('isSent');
         t.string('pathPicture', 100).nullable;
         // t.json('rawU81').nullable;
         // t.json('rawScale').nullable;
@@ -31,18 +35,20 @@ knex.schema
   })
     .catch(function(e) {
       console.error(e);
-    });
+    })
 //  .then(function(){
-//   return knex('tbdata').insert({ barocde: 123456, massweigh: '12345', calweigh: "380", priceweigh: '380'})
+//   return knex('tbdata').insert({ barcode: 'LA670000658VN', massweight: '640', length: 230, width: 240, height: 300,pathPicture: "/",  isSent: false})
 
 //  })
   // Finally, add a .catch handler for the promise chain
   
-    knex.select().table('tbdata').then((data)=>
+    knex.select().table('tbdata').whereIn('id', [11, 18]).then((data)=>
     {
-      data.map(function(row){
-        console.log(row)
-      })
+      // data.map(function(row){
+      //   console.log((JSON.parse(row)).length)
+      // })
+      console.log((data));
+
     }
     )
   

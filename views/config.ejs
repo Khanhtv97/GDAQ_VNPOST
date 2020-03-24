@@ -32,12 +32,14 @@ $(document).ready(function(){
         <div class="table-wrapper">
             <div class="table-title">
                 <div class="row">
-                    <div class="col-sm-6">
+                    <div class="col-sm-5">
 						<h2>Cấu hình thiết bị<b></b></h2>
 					</div>
-					<div class="col-sm-6">
-						<a href="#addEmployeeModal" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Thêm thiet bi</span></a>						
-                        <a href="/setting" class="btn btn-danger"> <span>Quay lại</span></a>
+					<div class="col-sm-7">
+                        <a href="#addDeviceModal" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Thêm thiết bị</span></a>	
+                        <a href="#replaceSSModal" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xe8ba;</i>Thay thế sensors<span></span></a>
+                        <a href="#replaceCAMModal" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xe3b0;</i>Thay thế camera<span></span></a>					
+                        <a href="/setting" class="btn btn-danger"><i class="material-icons">&#xe419;</i> <span>Quay lại</span></a>
                     </div>
                 </div>
             </div>
@@ -69,8 +71,8 @@ $(document).ready(function(){
                         <td><%=devices[i].stopbits%></td>
                         <td><%=devices[i].parity%></td>
                         <td>
-                            <a href="#editEmployeeModal" class="edit" data-toggle="modal" data-id="<%=devices[i].id%>"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-                            <a href="#deleteEmployeeModal" class="delete" data-toggle="modal" data-id="<%=devices[i].id%>"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+                            <a href="#editDeviceModal" class="edit" data-toggle="modal" data-id="<%=devices[i].id%>"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+                            <a href="#deleteDeviceModal" class="delete" data-toggle="modal" data-id="<%=devices[i].id%>"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
                         </td>
 					</tr>
 					<% }
@@ -84,10 +86,10 @@ $(document).ready(function(){
         </div>
     </div>
 	<!-- Edit Modal HTML -->
-	<div id="addEmployeeModal" class="modal fade">
+	<div id="addDeviceModal" class="modal fade">
 		<div class="modal-dialog">
 			<div class="modal-content">
-				<form action= "/adddevice" method= "POST">
+				<form action= "/adddevices" method= "POST">
 					<div class="modal-header">						
 						<h4 class="modal-title">Thêm thiết bị</h4>
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -111,6 +113,9 @@ $(document).ready(function(){
                                 <option value="/dev/ttyS0">/dev/ttyS0</option>
                                 <option value="/dev/ttyS1">/dev/ttyS1</option>
                                 <option value="/dev/ttyS2">/dev/ttyS2</option>
+                                <option value="/dev/ttyS3">/dev/ttyS3</option>
+                                <option value="/dev/ttyS4">/dev/ttyS4</option>
+                                <option value="/dev/ttyS5">/dev/ttyS5</option>
                                 <option value="/dev/ttyUSB0">/dev/ttyUSB0</option>
                                 <option value="/dev/ttyUSB1">/dev/ttyUSB1</option>
                                 <option value="/dev/ttyUSB2">/dev/ttyUSB2</option>
@@ -122,8 +127,9 @@ $(document).ready(function(){
                                 <option value="" disabled selected>Baurate</option>
                                 <option value="4800">4800</option>
                                 <option value="9600">9600</option>
-                                <option value="11200">9600</option>
+                                <option value="11200">11200</option>
                                 <option value="19200">19200</option>
+                                <option value="38400">38400</option>
                             </select>
                         </div>
                         <div class="form-group">
@@ -168,7 +174,7 @@ $(document).ready(function(){
 		</div>
 	</div>
 	<!-- Edit Modal HTML -->
-	<div id="editEmployeeModal" class="modal fade">
+	<div id="editDeviceModal" class="modal fade">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<form action= "/updatedevice" method= "POST">
@@ -198,6 +204,9 @@ $(document).ready(function(){
                                 <option value="/dev/ttyS0">/dev/ttyS0</option>
                                 <option value="/dev/ttyS1">/dev/ttyS1</option>
                                 <option value="/dev/ttyS2">/dev/ttyS2</option>
+                                <option value="/dev/ttyS3">/dev/ttyS3</option>
+                                <option value="/dev/ttyS4">/dev/ttyS4</option>
+                                <option value="/dev/ttyS5">/dev/ttyS5</option>
                                 <option value="/dev/ttyUSB0">/dev/ttyUSB0</option>
                                 <option value="/dev/ttyUSB1">/dev/ttyUSB1</option>
                                 <option value="/dev/ttyUSB2">/dev/ttyUSB2</option>
@@ -209,8 +218,9 @@ $(document).ready(function(){
                                 <option value="" disabled selected>Baurate</option>
                                 <option value="4800">4800</option>
                                 <option value="9600">9600</option>
-                                <option value="11200">9600</option>
+                                <option value="11200">11200</option>
                                 <option value="19200">19200</option>
+                                <option value="38400">38400</option>
                             </select>
                         </div>
                         <div class="form-group">
@@ -253,14 +263,49 @@ $(document).ready(function(){
 				</form>
 			</div>
 		</div>
+    </div>
+    <!-- Replace Modal HTML -->
+    <div id="replaceSSModal" class="modal fade">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<form action= "/setaddress" method= "POST">
+					<div class="modal-header">						
+						<h4 class="modal-title">Thay thế cảm biến</h4>
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					</div>
+					<div class="modal-body">			
+						<div class="form-group">
+                            <span>Tên cảm biến</span>
+							<select class="selectpicker" name="nameSS">
+                                <option value="" disabled selected>Tên cảm biến</option>
+                                <option value="ssDai">Dài</option>
+                                <option value="ssRong">Rộng</option>
+                                <option value="ssCao">Cao</option>
+                              </select>
+                        </div>
+                        <div class="form-group" type= "hidden">
+                            <span>Serial Number</span>
+                            <input type="text" name="serialnumber" required>
+                        </div>	
+                    <small>Lưu ý: Sau khi việc thay thế hoàn tất hãy khởi động lại thiết bị !</small>	
+					</div>
+					<div class="modal-footer">
+						<input type="button" class="btn btn-default" data-dismiss="modal" value="Hủy">
+						<input type="submit" class="btn btn-success" value="Thay thế">
+					</div>
+				</form>
+			</div>
+		</div>
 	</div>
+    <!--  -->
 	<!-- Delete Modal HTML -->
-	<div id="deleteEmployeeModal" class="modal fade">
+	<div id="deleteDeviceModal" class="modal fade">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<form action= "/deleteDevice" method= "POST">
 					<div class="modal-header">						
-						<h4 class="modal-title">Xóa thiết bị</h4>
+                        <h4 class="modal-title">Xóa thiết bị</h4>
+                        <small>Xoa co the gay rui ro</small>
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 					</div>
 					<div class="modal-body">					
@@ -280,12 +325,12 @@ $(document).ready(function(){
 </body>
 </html>
 <script>
-	$('#deleteEmployeeModal').on('show.bs.modal', function (event) {
+	$('#deleteDeviceModal').on('show.bs.modal', function (event) {
   var id = $(event.relatedTarget).data('id');
   $(this).find("#inputID").val(id);
 });
 
-$('#editEmployeeModal').on('show.bs.modal', function (event) {
+$('#editDeviceModal').on('show.bs.modal', function (event) {
   var id = $(event.relatedTarget).data('id');
   var name = $(event.relatedTarget).data('name');
   var username = $(event.relatedTarget).data('username');

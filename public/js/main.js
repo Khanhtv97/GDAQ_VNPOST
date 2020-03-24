@@ -1,4 +1,4 @@
-var socket = io.connect('http://192.168.0.231:3000'); //connect to server
+var socket = io.connect('http://localhost:3000'); //connect to server
         var user = document.getElementById('user').innerText;
         socket.emit('user', {us: user});
         socket.on('calibVal', function(data){
@@ -24,6 +24,10 @@ var socket = io.connect('http://192.168.0.231:3000'); //connect to server
             document.getElementById('height').innerHTML = data.height; //calWeigh
             document.getElementById('calWeight').innerHTML = data.calculateWeight;
             document.getElementById('priceWeight').innerHTML = data.pWeight; //priceWeight
+            document.getElementById('SQL').innerHTML = data.sqL;
+            document.getElementById('SQH').innerHTML = data.sqH;
+            document.getElementById('SQW').innerHTML = data.sqW;
+
             if(data.msgH !=''){
                 document.getElementById('msgSSH').innerHTML = data.msgH;
                 document.getElementById('height').style.backgroundColor ="red";
@@ -63,7 +67,8 @@ var socket = io.connect('http://192.168.0.231:3000'); //connect to server
             if(data.diffW >300){document.getElementById('diffWeigh').style.background ='red'; document.getElementById('rate').style.background ='red';}
             else{document.getElementById('diffWeigh').style.background ='gray';document.getElementById('rate').style.background ='gray';}
             document.getElementById('rate').innerHTML = data.Rate; //isAir
-            if(data.isAir ==true){document.getElementById('spAirScK').innerHTML = "Đường Bay"}
+            if(data.svrCode =="L"){document.getElementById('spAirScK').innerHTML = "DV trọn gói"}
+            else if(data.isAir ==true){document.getElementById('spAirScK').innerHTML = "Đường Bay"}
             else if(data.isAir ==false){document.getElementById('spAirScK').innerHTML = "Đường Bộ"}
             else{document.getElementById('spAirScK').innerHTML = "---"}
         });

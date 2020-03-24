@@ -8,6 +8,7 @@
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" type="text/css" href="css/setting.css">
     <title>Setting</title>
 </head>
@@ -20,12 +21,13 @@
                     <h2>Cài đặt<b></b></h2>
                 </div>
                 <div class="col-sm-6">
-                    <a href="/" class="btn btn-success"> <span>Quay lại</span></a>						
+                    <a href="/" class="btn btn-success"> <i class="material-icons">&#xe419;</i><span>Quay lại</span></a>						
                 </div>
             </div>
         </div>
+        
         <div class="row">
-          <div class="col-sm-4">
+          <div class="col-sm-3">
             <div class="card" style="width: 15rem;">
                 <img class="card-img-top" src="/images/changpass.png" alt="Card image cap">
                 <div class="card-body">
@@ -33,11 +35,19 @@
                 </div>
               </div>
           </div>
-          <div class="col-sm-4">
+          <div class="col-sm-3">
+            <div class="card" style="width: 15rem;">
+                <img class="card-img-top" src="/images/senddata.png" alt="Card image cap">
+                <div class="card-body">
+                  <a href="#tranferDatatype" class="btn btn-info" data-toggle="modal"><span>Cài đặt truyền dữ liệu</span></a>
+                </div>
+              </div>
+          </div>
+          <div class="col-sm-3">
             <div class="card" style="width: 15rem;">
                 <img class="card-img-top" src="/images/admin.png" alt="Card image cap">
                 <div class="card-body">
-                  <a href="#adminControl" class="btn btn-info" data-toggle="modal"><span>Dành cho cán bộ quản lý</span></a>
+                  <a href="#adminControl" class="btn btn-info" data-toggle="modal"><span>Dành cho quản lý</span></a>
                   <% if (messages.error) { %>
                    <span><%= messages.error %></span> 
                   <% } %>
@@ -45,7 +55,7 @@
                 
               </div>
           </div>
-          <div class="col-sm-4">
+          <div class="col-sm-3">
             <div class="card" style="width: 15rem;">
                 <img class="card-img-top" src="/images/manufacture.png" alt="Card image cap">
                 <div class="card-body">
@@ -84,6 +94,36 @@
                 <input id="confirm_newpass" type="password" class="form-control" name="Confirmnewpass" required>
                 <span id='message'></span>
               </div>
+            </div>
+            <div class="modal-footer">
+              <input type="button" class="btn btn-default" data-dismiss="modal" value="Hủy">
+              <input type="submit" class="btn btn-success" value="Thay đổi">
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div id="tranferDatatype" class="modal fade">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <form action= "/tranferDatatype" method= "POST">
+            <div class="modal-header">						
+              <h4 class="modal-title">Thay đổi kiểu truyền dữ liệu</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modal-body">	
+              <%if(sendDataType[0].type ==1){%>
+                <span>Kiểu hiện tại: <strong>Tự động</strong> </span>
+                <%}else{%>
+                  <span>Kiểu hiện tại: <strong>Thủ công</strong> </span>
+                  <%}%>
+                <br>
+                <br>
+              <select class="selectpicker" name="Type">
+                <option value="" disabled selected>Lựa chọn kiểu truyền dữ liệu</option>
+                <option value="1">Tự động</option>
+                <option value='0'>Thủ công</option>
+            </select>
             </div>
             <div class="modal-footer">
               <input type="button" class="btn btn-default" data-dismiss="modal" value="Hủy">
