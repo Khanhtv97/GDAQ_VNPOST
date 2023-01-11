@@ -20,7 +20,7 @@
     "fs": "0.0.1-security",
     "hbs": "^4.1.0",
     "hex2dec": "^1.1.2",
-    "knex": "^0.20.11",
+    "knex": "^2.4.0",
     "method-override": "^3.0.0",
     "morgan": "~1.6.1",
     "ngrok": "^3.2.7",
